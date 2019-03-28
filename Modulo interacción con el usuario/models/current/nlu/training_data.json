@@ -1,0 +1,129 @@
+{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "intent": "ask_for_a_plot",
+        "entities": [
+          {
+            "start": 21,
+            "end": 34,
+            "value": "Black Panther",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the plot of Black Panther?"
+      },
+      {
+        "intent": "ask_for_a_plot",
+        "entities": [
+          {
+            "start": 27,
+            "end": 36,
+            "value": "Gladiator",
+            "entity": "movie"
+          }
+        ],
+        "text": "And what about the plot of Gladiator?"
+      },
+      {
+        "intent": "ask_for_a_plot",
+        "entities": [
+          {
+            "start": 36,
+            "end": 39,
+            "value": "Her",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me something about the plot of Her."
+      },
+      {
+        "intent": "ask_for_a_plot",
+        "entities": [
+          {
+            "start": 23,
+            "end": 35,
+            "value": "12 angry man",
+            "entity": "movie"
+          }
+        ],
+        "text": "Is it good the plot of 12 angry man. What about it?"
+      },
+      {
+        "intent": "ask_for_a_plot",
+        "entities": [
+          {
+            "start": 36,
+            "end": 42,
+            "value": "Batman",
+            "entity": "movie"
+          }
+        ],
+        "text": "Could you resume me what happens in Batman?"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 15,
+            "end": 28,
+            "value": "The Godfather",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who appears in The Godfather?"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 21,
+            "end": 31,
+            "value": "Casablanca",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who are the stars in Casablanca?"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 23,
+            "end": 31,
+            "value": "Die Hard",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me who appears in Die Hard?"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 26,
+            "end": 38,
+            "value": "Harry Potter",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who's part of the cast of Harry Potter?"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 20,
+            "end": 28,
+            "value": "Kingsman",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the cast of Kingsman."
+      }
+    ],
+    "regex_features": [],
+    "lookup_tables": [],
+    "entity_synonyms": []
+  }
+}
