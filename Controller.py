@@ -12,7 +12,7 @@ from omdb_module import get_movie_info, get_summary_plot, get_actors,get_directo
 
 #Variables globales
 
-input="Which are the actors of Rambo?" #Pregunta introducida por el usuario.
+input="Which awards has Black Panther" #Pregunta introducida por el usuario.
 
 
 intent, entity= recognize_intent(input)

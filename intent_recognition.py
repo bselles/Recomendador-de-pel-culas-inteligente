@@ -27,7 +27,6 @@ def recognize_intent(user_input):
             entity=x["value"]
     else:
         entity=""
-        return (result['intent']['name'], )
     
     return (result['intent']['name'],entity)
     
