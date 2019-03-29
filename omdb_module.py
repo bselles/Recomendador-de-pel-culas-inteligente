@@ -51,9 +51,6 @@ def get_awards(title):
     info=get_movie_info(title)
     return info['Awards']
 
-def get_production(title):
-    info=get_movie_info(title)
-    return info['Production']
 
 def get_metacritic_score(title):
     info=get_movie_info(title)
