@@ -2,6 +2,54 @@
   "rasa_nlu_data": {
     "common_examples": [
       {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 27,
+            "end": 33,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What can you tell me about Avatar?"
+      },
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 19,
+            "end": 25,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me info about Avatar."
+      },
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 36,
+            "end": 42,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which information do you have about Avatar?"
+      },
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 27,
+            "end": 33,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Do you know anything about Avatar?"
+      },
+      {
         "intent": "ask_for_a_plot",
         "entities": [
           {
@@ -59,7 +107,19 @@
             "entity": "movie"
           }
         ],
-        "text": "Could you resume me what happens in Batman?"
+        "text": "Could you sum to me what happens in Batman?"
+      },
+      {
+        "intent": "ask_for_a_plot",
+        "entities": [
+          {
+            "start": 16,
+            "end": 22,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What happens in Avatar?"
       },
       {
         "intent": "ask_for_actors",
@@ -120,6 +180,54 @@
           }
         ],
         "text": "Tell me the cast of Kingsman."
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 17,
+            "end": 27,
+            "value": "El Padrino",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who has directed El Padrino?"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who's the director of Avatar?"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "And what about the director of Avatar?"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 30,
+            "end": 36,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me who's the director of Avatar."
       }
     ],
     "regex_features": [],

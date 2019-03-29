@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\Bielo\\Desktop\\DASI\\M\303\263dulo interacci\303\263n con el usuario\\models\\current\\nlu\\intent_classifier_tensorflow_embedding.ckpt"
-all_model_checkpoint_paths: "C:\\Users\\Bielo\\Desktop\\DASI\\M\303\263dulo interacci\303\263n con el usuario\\models\\current\\nlu\\intent_classifier_tensorflow_embedding.ckpt"
+model_checkpoint_path: "C:\\Users\\Bielo\\Desktop\\DASI\\Modulo interacci\303\263n con el usuario\\models\\current\\nlu\\intent_classifier_tensorflow_embedding.ckpt"
+all_model_checkpoint_paths: "C:\\Users\\Bielo\\Desktop\\DASI\\Modulo interacci\303\263n con el usuario\\models\\current\\nlu\\intent_classifier_tensorflow_embedding.ckpt"
