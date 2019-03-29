@@ -13,13 +13,13 @@ omdb_apikey='dad4d84f'
 
 #---------------------------------------------------------------------------
 #Necesario para el parseo de 
-def parse_bytes_to_JSON(input):
-    decoded = input.decode('utf8') #Decodificamos usando utf-8. El resultado es un string con forma de json.
+def parse_bytes_to_JSON(data):
+    decoded = data.decode('utf8') #Decodificamos usando utf-8. El resultado es un string con forma de json.
     return json.loads(decoded);  #Creamos el json a partir del string  
 
-def parse_blank_spaces(input):
+def parse_blank_spaces(data):
     #Si no tenemos una sola palabra, parsea. En caso contrario, no hace nada.
-    return input.replace(" ", "%20") 
+    return data.replace(" ", "%20") 
 
 #---------------------------------------------------------------------------
 
