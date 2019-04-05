@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Módulo que implementa la comunicación con la API de OMDB (Open Movie Database)
+    MÓDULO DE INTERACCIÓN CON LA FUENTE DE CONOCIMIENTO
+    
+    Módulo que implementa la comunicación con la API de OMDB (Open Movie Database).
+    Mediante la comunicación con esta API, se obtendrá nueva información que si procede
+    se introducirá en la base de conocimiento.
 '''
+
+'''
+    PARÁMETROS DE CONFIGURACIÓN DEL MÓDULO
+'''
+
+omdb_endpoint='http://www.omdbapi.com/?apikey='
+omdb_apikey='dad4d84f'
+
+
 
 #Imports correspondientes
 import urllib.request
 import json
 
-omdb_endpoint='http://www.omdbapi.com/?apikey='
-omdb_apikey='dad4d84f'
 
-#---------------------------------------------------------------------------
-#Necesario para el parseo de 
-def parse_bytes_to_JSON(data):
-    decoded = data.decode('utf8') #Decodificamos usando utf-8. El resultado es un string con forma de json.
-    return json.loads(decoded);  #Creamos el json a partir del string  
+'''
+    FUNCIONALIDADES DEL MÓDULO
+'''
 
-def parse_blank_spaces(data):
-    #Si no tenemos una sola palabra, parsea. En caso contrario, no hace nada.
-    return data.replace(" ", "%20") 
-
-#---------------------------------------------------------------------------
 
 
 def get_movie_info(title):
@@ -68,13 +72,33 @@ def get_rottentomatoes_score(title):
             return x['Value']
     
 
-#print(get_movie_info('Gladiator'))
-#print(get_summary_plot('Gladiator'))
-#print(get_actors('Gladiator'))
-#print(get_director('Gladiator'))
-#print(get_awards('Gladiator'))
-#print(get_production('Gladiator'))
-#print(get_metacritic_score('Gladiator'))
-#print(get_imdb_score('Gladiator'))
-#print(get_rottentomatoes_score('Gladiator'))
+'''
+    FUNCIONES AUXILIARES
+'''
+
+#---------------------------------------------------------------------------
+#Necesario para el parseo de 
+def parse_bytes_to_JSON(data):
+    decoded = data.decode('utf8') #Decodificamos usando utf-8. El resultado es un string con forma de json.
+    return json.loads(decoded);  #Creamos el json a partir del string  
+
+def parse_blank_spaces(data):
+    #Si no tenemos una sola palabra, parsea. En caso contrario, no hace nada.
+    return data.replace(" ", "%20") 
+
+#---------------------------------------------------------------------------
+
+
+'''
+    EJEMPLO DE FUNCIONAMIENTO DEL MÓDULO
+'''
+if __name__ == "__main__":
+    print(get_movie_info('Alita'))
+    print(get_summary_plot('Gladiator'))
+    print(get_actors('Gladiator'))
+    print(get_director('Gladiator'))
+    print(get_awards('Gladiator'))
+    print(get_metacritic_score('Gladiator'))
+    print(get_imdb_score('Gladiator'))
+    print(get_rottentomatoes_score('Gladiator'))
 
