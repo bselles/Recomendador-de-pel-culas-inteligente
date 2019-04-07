@@ -17,54 +17,62 @@ tm=Trained_Model()
 
 ftr=['Avatar','Looper','Her','War', 'Warcraft']
 
-
-
-while True:
-    example= input('Insert here:  ')
-    
-    intent, entity= recognize_intent(example)
-    
-    print(intent)
-    if(entity=="" and intent!="ask_for_recommendation"):
-        entity=input("Which film you're talking about:  ")
-        
-    
+def procesa(intent, entity):
     if(intent=="ask_for_general_info"):
-        print(get_movie_info(entity))
+        return get_movie_info(entity)
     elif(intent=="ask_for_plot"):
-        print(get_summary_plot(entity))
+        return get_summary_plot(entity)
     elif(intent=="ask_for_actors"):
-        print(get_actors(entity))
+        return get_actors(entity)
     elif(intent=="ask_for_director"):
-        print(get_director(entity))
+        return get_director(entity)
     elif(intent=="ask_for_awards"):
-        print(get_awards(entity))
+        return get_awards(entity)
     elif(intent=="ask_for_metacritic_score"):
-        print(get_metacritic_score(entity))
+        return get_metacritic_score(entity)
     elif(intent=="ask_for_imdb_score"):
-        print(get_imdb_score(entity))
+        return get_imdb_score(entity)
     elif(intent=="ask_for_rotten_score"):
-        print(get_rottentomatoes_score(entity))
+        return get_rottentomatoes_score(entity)
     elif(intent=="not_good_opinion"):
-        tm.add_opinion(entity,'NO')        
+        tm.add_opinion(entity,'NO')
+        return "Thanks for giving your opinon"
     elif(intent=="good_opinion"):
         tm.add_opinion(entity,'YES')
+        return "Thanks for giving your opinon"
     elif(intent=="ask_for_recommendation"):
         
         i=0
+        resul = ""
         while(i<len(ftr)):
             if('YES'== tm.get_recommendation(ftr[i])):
-                print(ftr[i])
+                #print(ftr[i])
+                resul = resul + ftr[i] + "\n"
                 i=len(ftr)
             i=i+1
-        
-        
-        
-        
+        return resul
+
     elif(intent=="ask_for_score"):
-        #print(get_movie_info(entity))
-        print("MOSTRARIA NOTAS")
+        #return get_movie_info(entity))
+        return "MOSTRARIA NOTAS"
     else:
-        print("El intent no se ha encontrado correctamente")
+        return "El intent no se ha encontrado correctamente"
+
+
+
+if __name__ == "__main__" :
+
+    while True:
+        example= input('Insert here: \n')
+    
+        intent, entity= recognize_intent(example)
+    
+        print(intent)
+        if(entity=="" and intent!="ask_for_recommendation"):
+            entity=input("Which film are you talking about?  \n")
+        
+        print(procesa(intent, entity))
+    
+
     
     
