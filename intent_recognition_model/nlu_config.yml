@@ -1,3 +1,0 @@
-
-language: en_core_web_sm
-pipeline: tensorflow_embedding

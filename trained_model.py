@@ -43,7 +43,7 @@ class Trained_Model:
         
         #En función del valor de este campo, utilizará una técnica u otra para entrenar el sistema.
         #Los posibles valores son regresión logística, árbol de clasificación y red neuronal.
-        self.model_type="logistic_regression"
+        self.model_type="classification_tree"
         
         #Parámetros que se utilizarán para el entrenamiento.
         self.parameters=['director','Runtime','Genre','Subgenre','metacritic','imdb','rotten']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
