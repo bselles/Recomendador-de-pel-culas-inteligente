@@ -5,6 +5,10 @@
     Módulo asociado al sistema de inferencia de recomendaciones 
 '''
 
+'''
+    -IMPORTANTE QUE FILE.TEST Y FILE.TRAIN TENGAN UN EJEMPLO DE CADA CLASE.
+'''
+
 
 from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
@@ -19,9 +23,7 @@ from pathlib import Path
 class Trained_Model:
     
     #Constructor.
-    def __init__(self):
-      
-      
+    def __init__(self):      
         '''
             PARÁMETROS ASOCIADOS A LA CONFIGURACIÓN DEL SISTEMA
         '''
@@ -67,6 +69,14 @@ class Trained_Model:
         #En función del modelo seleccionado utilizará un tipo de aprendizaje u otro.
         if self.model_type== "logistic_regression":
             self.model=self.__train_with_logistic_regression(df)
+        elif self.model_type == "classification_tree":
+            self.model = self.__train_with_decision_tree(df)
+        elif self.model_type == "neural_net":
+            
+            df.show()
+            
+            self.model = self.__train_with_multilayer_perceptron_classifier(df,[len(self.parameters)+1, 5, 4, 2], self.max_iter, 128, 1234)
+            
             
         '''
         RELLENAR EL ELSE ---> TODO
@@ -78,7 +88,7 @@ class Trained_Model:
     
     #Opinion es 'YES' o 'NO'
     def add_opinion(self,film_name, opinion):
-        self.__add_training_info(film_name,opinion)
+        return self.__add_training_info(film_name,opinion)
         
         
     #SUPONEMOS QUE LA PELÍCULA EXISTE
@@ -96,10 +106,20 @@ class Trained_Model:
         
         #Si se ha encontrado la película...
         if line!="":
-            line = line + "YES\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante.
+            
+            #self.model.predict(line)
+            
+            line = line + "NO\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante.
+            #line= line  + "\n"
+            
             
             #Sobreescribe el contenido de test_data
-            self.__write_header(self.test_data)
+            
+            my_file = Path(self.test_data)
+        
+            if not my_file.is_file():
+                #creamos el fichero si no existe y añadimos la cabecera
+                self.__write_header(self.test_data)
             
             #Append con la cabecera
             with open(self.test_data, "a") as myfile:
@@ -109,12 +129,21 @@ class Trained_Model:
             df=self.__load_df(self.test_data)
             df=self.__prepare_df(df)
             
+            
             #Obtenemos las inferencias del sistema. "Predice" lo que diría el usuario.
             predictions = self.model.transform(df)
             
-            #Devolvemos la recomendación.
-            result=predictions.select('prediction').collect()[0]
-            return self.__switch_label(result[self.result_column],result['label'])
+            predictions.show()
+            
+            
+            
+            pos= len(predictions.select('recommend').collect())-1
+            
+            
+            #Devolvemos la recomendación.Devolvemos la que se encuentra el la última posición.
+            return self.__switch_label(predictions.select('recommend').collect()[pos]['recommend'] \
+                                       , predictions.select('prediction').collect()[pos][self.result_column]\
+                                       ,predictions.select(self.label_column).collect()[pos][self.label_column])
 
         else:
             #Si no se ha encontrado la película, devolvemos "".
@@ -124,11 +153,14 @@ class Trained_Model:
         FUNCIONES AUXILIARES DEL SISTEMA
     '''
     
-    def __switch_label(self, prediction,label):
+    def __switch_label(self, recommend,prediction,label):
         if prediction==label:
-            return 'YES'
+            return recommend
         else:
-            return 'NO'
+            if(recommend=='YES'):
+                return 'NO'
+            else:
+                return 'YES'
 
     '''
         Si hubo un error, devuelve "".
@@ -157,14 +189,16 @@ class Trained_Model:
             df=self.__load_df(self.training_data)
             #df= self.__set_types(df)
             df=self.__prepare_df(df) 
-            df.show()
+            #df.show()
             
             #Por ahora usa regresión logística.
             
             if self.model_type=="logistic_regression":
                 self.model=self.__train_with_logistic_regression(df)
-            else:
-                print("TODO")
+            elif self.model_type == "classification_tree":
+               self.model = self.__train_with_decision_tree(df)
+            elif self.model_type == "neural_net":
+                self.model = self.__train_with_multilayer_perceptron_classifier(df, [ len(self.parameters)+1, 5, 4, 2], self.max_iter, 128, 1234)
             '''
                 TODO------------->
             '''
@@ -224,15 +258,15 @@ class Trained_Model:
     
     #Devuelve el modelo entrenado.
     def __train_with_logistic_regression(self,df):
-        lr = LogisticRegression(maxIter=self.max_iter)
+        lr = LogisticRegression(maxIter=self.max_iter, labelCol="label", featuresCol="features")
         return lr.fit(df)
     
     #Devuelve el modelo entrenado.
     def __train_with_decision_tree(self,df):
         dt = DecisionTreeClassifier(maxBins=30000, labelCol="label", featuresCol="features")
         return dt.fit(df)
-    
-    def __train_with_multilayer_perceptrón_classifier(self,df,layers, max_iter, block_size, seed ):
+   
+    def __train_with_multilayer_perceptron_classifier(self,df,layers, max_iter, block_size, seed, labelCol="label", featuresCol="features" ):
         trainer = MultilayerPerceptronClassifier(maxIter=max_iter, layers=layers, blockSize=block_size, seed=seed)
         return trainer.fit(df)
     
@@ -306,10 +340,19 @@ class Trained_Model:
 if __name__ == "__main__":
     tm=Trained_Model()
 
-    print(tm.add_opinion('Django Unchained','YES'))    
+    print(tm.add_opinion('Her','YES'))    
+
+    print(tm.add_opinion('Looper','NO'))
+    print(tm.add_opinion('Die Hard','YES'))
+    print(tm.add_opinion('Mortal engines','NO'))
     print(tm.add_opinion('Alita','NO'))
+    print(tm.add_opinion('Black Panther','NO'))
+
     
-    print(tm.get_recommendation('Alita'))
-    
-    
+    print(tm.get_recommendation('Her'))
+    print(tm.get_recommendation('Looper'))
+    print(tm.get_recommendation('Black Panther'))
+    print(tm.get_recommendation('Mortal Engines'))
+    print(tm.get_recommendation('Die Hard'))
+
     
