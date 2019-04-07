@@ -62,10 +62,15 @@ def recognize_intent(user_input):
 
 if __name__ == "__main__":
     test_cases= [\
-         {"intent": "What can you tell me about The Godfather ", "solution":"ask_for_general_info"},\
-         {"intent": "Who are the actors of Gladiator ", "solution": "ask_for_actors"},\
-         {"intent": "Who appears in Narnia ", "solution":"ask_for_actors"},\
-         {"intent":"What can you tell me about the plot of Vinci ", "solution":"ask_for_plot"},\
+         {"intent": "I don't like films like Avatar ", "solution":"not_good_opinion"},\
+         {"intent": "I love Gladiator ", "solution": "good_opinion"},\
+         {"intent": "Recommend me a film please", "solution":"ask_for_recommendation"},\
+         {"intent":"Tell me a film to watch", "solution":"ask_for_recommendation"},\
+         {"intent": "Next time don't recommend me films like Avatar", "solution":"not_good_opinion"},\
+         {"intent": "Next time recommend me films like Avatar", "solution": "good_opinion"},\
+         {"intent": "I've seen Her and i liked it", "solution":"good_opinion"},\
+         {"intent":"I've seen Her and I didn't like it", "solution":"not_good_opinion"},\
+         
          {"intent":"Who is in the cast of el padrino ", "solution":"ask_for_actors"},\
          {"intent":"What happens in Narnia Chronicles ", "solution":"ask_for_plot"},\
          {"intent":" What about the actors who appear in Film", "solution":"ask_for_actors"},\

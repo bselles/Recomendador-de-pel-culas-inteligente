@@ -89,4 +89,23 @@
     - What do they think about [joy](movie)
     - Can you punctuate [avatar](movie)
 
+
+    ## intent: ask_for_recommendation
+    -Hey, which film could I watch?
+    -Tell me a film to watch 
+    -Tell me a film to see
+    -I don't know what to see
+    -I would like to watch a film, tell me one please.
+    -I don't know what to see, tell me one please.
+    
+    ## intent: not_good_opinion
+    - I've seen [Gladiator] (movie) and I didn't like it.
+    - I don't like [Gladiator] (movie).
+    - Don't recommend me films like [gladiator] (movie)
+    
+    ## intent: good_opinion
+    - I've seen [Gladiator] (movie) and I loved it.
+    - I like [Gladiator] (movie).
+    - Next time recommend me films like [gladiator] (movie)
+    - I like films like [Gladiator] (movie)
     

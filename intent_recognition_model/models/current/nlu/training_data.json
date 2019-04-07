@@ -820,6 +820,58 @@
           }
         ],
         "text": "Can you punctuate avatar"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "Hey, which film could I watch?"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "Tell me a film to watch"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "Tell me a film to see"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "I don't know what to see"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "I would like to watch a film, tell me one please."
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "I don't know what to see, tell me one please."
+      },
+      {
+        "intent": "not_good_opinion",
+        "text": "I've seen [Gladiator] (movie) and I didn't like it."
+      },
+      {
+        "intent": "not_good_opinion",
+        "text": "I don't like [Gladiator] (movie)."
+      },
+      {
+        "intent": "not_good_opinion",
+        "text": "Don't recommend me films like [gladiator] (movie)"
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I've seen [Gladiator] (movie) and I loved it."
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I like [Gladiator] (movie)."
+      },
+      {
+        "intent": "good_opinion",
+        "text": "Next time recommend me films like [gladiator] (movie)"
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I like films like [Gladiator] (movie)"
       }
     ],
     "regex_features": [],
