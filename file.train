@@ -1,9 +1,5 @@
-director,Runtime,Genre,Subgenre,metacritic,imdb,rotten,recommend
-Quentin Tarantino,165,Drama,Western,8.4,86,81,YES
-Rian Johnson,113,Action,Crime,7.4,93,84,NO
-Spike Jonze,126,Drama,Romance,8.0,94,90,YES
-Rian Johnson,113,Action,Crime,7.4,93,84,NO
-John McTiernan,132,Action,Thriller,8.2,93,72,YES
-Christian Rivers,128,Action,Adventure,6.2,26,44,NO
-Robert Rodriguez,122,Action,Adventure,7.6,60,54,NO
-Ryan Coogler,134,Action,Adventure,7.3,97,88,NO
+Genre,rotten,recommend
+Action,86,81,YES
+Action,7.8,82,NO
+Action,7.4,93,NO
+Drama,8.0,94,YES

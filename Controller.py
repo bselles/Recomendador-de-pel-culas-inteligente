@@ -15,7 +15,10 @@ from trained_model import Trained_Model
 tm=Trained_Model()
 
 
-ftr=['Avatar','Looper','Her','War', 'Warcraft']
+ftr=['Avatar','Looper','Her','War', 'Warcraft', 'Dunkirk', 'The Prestige']
+
+recommended_movies={} #Películas que han gustado al usuario.
+not_to_recomend={}
 
 def procesa(intent, entity):
     if(intent=="ask_for_general_info"):
@@ -35,6 +38,7 @@ def procesa(intent, entity):
     elif(intent=="ask_for_rotten_score"):
         return get_rottentomatoes_score(entity)
     elif(intent=="not_good_opinion"):
+        not_to_recomend[entity]=True
         tm.add_opinion(entity,'NO')
         return "Thanks for giving your opinon"
     elif(intent=="good_opinion"):
@@ -44,9 +48,10 @@ def procesa(intent, entity):
         
         i=0
         resul = ""
-        while(i<len(ftr)):
+        while(i<len(ftr) and not (ftr[i] in recommended_movies) and not(ftr[i] in not_to_recomend)  ):
             if('YES'== tm.get_recommendation(ftr[i])):
                 #print(ftr[i])
+                recommended_movies[ftr[i]]=True
                 resul = resul + ftr[i] + "\n"
                 i=len(ftr)
             i=i+1

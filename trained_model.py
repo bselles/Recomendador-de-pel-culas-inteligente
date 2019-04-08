@@ -29,11 +29,20 @@ class Trained_Model:
         '''
           
         #Asociados a la sesión Spark.
+        #self.spark_session
         self.session_name="SparkML" 
         
         #Asociados al entrenamiento del modelo mediante SparkML.
         self.numeric_columns=['Runtime','metacritic','imdb','rotten']
         self.string_columns=['director','Genre','Subgenre','recommend']
+        
+        #self.numeric_columns=['imdb','rotten']
+        #self.string_columns=['Genre','recommend']
+        
+        
+        #self.numeric_columns=['metacritic','rotten']
+        #self.string_columns=['Genre','Subgenre','recommend']
+        
         
         self.incomplete_sign='NULL'
         
@@ -43,10 +52,13 @@ class Trained_Model:
         
         #En función del valor de este campo, utilizará una técnica u otra para entrenar el sistema.
         #Los posibles valores son regresión logística, árbol de clasificación y red neuronal.
-        self.model_type="classification_tree"
+        self.model_type="neural_net"
         
         #Parámetros que se utilizarán para el entrenamiento.
         self.parameters=['director','Runtime','Genre','Subgenre','metacritic','imdb','rotten']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
+        #self.parameters=['Genre','imdb','rotten']
+        #self.parameters=['Genre','Subgenre','metacritic','rotten']
+        
         
         #Nombre del fichero dónde de almacenarán los ejemplos de entrenamiento.
         self.training_data= "file.train"                                       
@@ -72,14 +84,11 @@ class Trained_Model:
         elif self.model_type == "classification_tree":
             self.model = self.__train_with_decision_tree(df)
         elif self.model_type == "neural_net":
-            
-            df.show()
-            
-            self.model = self.__train_with_multilayer_perceptron_classifier(df,[len(self.parameters)+1, 5, 4, 2], self.max_iter, 128, 1234)
+            self.model = self.__train_with_multilayer_perceptron_classifier(df,[len(self.parameters), 5,4, 2], self.max_iter, 128, 1234)
             
             
         '''
-        RELLENAR EL ELSE ---> TODO
+        RELLENAR EL ELSE RED NEURONAL ---> TODO
         '''
     
     '''
@@ -107,35 +116,29 @@ class Trained_Model:
         #Si se ha encontrado la película...
         if line!="":
             
-            #self.model.predict(line)
+            df= self.__load_df(self.training_data)
+            df.show()
+
             
-            line = line + "NO\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante.
-            #line= line  + "\n"
+            line = line + "NO\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante
             
-            
-            #Sobreescribe el contenido de test_data
-            
-            my_file = Path(self.test_data)
-        
-            if not my_file.is_file():
-                #creamos el fichero si no existe y añadimos la cabecera
-                self.__write_header(self.test_data)
-            
-            #Append con la cabecera
+            self.__write_header(self.test_data)
             with open(self.test_data, "a") as myfile:
                 myfile.write(line)
-                
-            #Cargamos el contenido de test_data y lo parseamos.
-            df=self.__load_df(self.test_data)
-            df=self.__prepare_df(df)
             
+            df1= self.__load_df(self.test_data)
+            
+            df1.show()
+            
+            
+            df=df.union(df1)
+            
+            df=self.__prepare_df(df)
             
             #Obtenemos las inferencias del sistema. "Predice" lo que diría el usuario.
             predictions = self.model.transform(df)
             
             predictions.show()
-            
-            
             
             pos= len(predictions.select('recommend').collect())-1
             
@@ -144,7 +147,7 @@ class Trained_Model:
             return self.__switch_label(predictions.select('recommend').collect()[pos]['recommend'] \
                                        , predictions.select('prediction').collect()[pos][self.result_column]\
                                        ,predictions.select(self.label_column).collect()[pos][self.label_column])
-
+            
         else:
             #Si no se ha encontrado la película, devolvemos "".
             return ""
@@ -152,7 +155,7 @@ class Trained_Model:
     '''
         FUNCIONES AUXILIARES DEL SISTEMA
     '''
-    
+
     def __switch_label(self, recommend,prediction,label):
         if prediction==label:
             return recommend
@@ -198,7 +201,7 @@ class Trained_Model:
             elif self.model_type == "classification_tree":
                self.model = self.__train_with_decision_tree(df)
             elif self.model_type == "neural_net":
-                self.model = self.__train_with_multilayer_perceptron_classifier(df, [ len(self.parameters)+1, 5, 4, 2], self.max_iter, 128, 1234)
+                self.model = self.__train_with_multilayer_perceptron_classifier(df, [ len(self.parameters), 5,4, 2], self.max_iter, 128, 1234)
             '''
                 TODO------------->
             '''
@@ -210,13 +213,13 @@ class Trained_Model:
         
     def __load_file(self,filename):
         #Creamos la sesión del df.
-        spark = SparkSession \
+        self.spark_session = SparkSession \
             .builder \
             .appName(self.session_name) \
             .getOrCreate()
     
-        return spark.read.option("header", "true").option("inferSchema", "true").csv(filename)
-    
+        #return self.spark_session.read.option("header", "true").option("inferSchema", "true").csv(filename)
+        return self.spark_session.read.option("header", "true").csv(filename)
     
     
     def __write_header(self,filename):
@@ -341,7 +344,6 @@ if __name__ == "__main__":
     tm=Trained_Model()
 
     print(tm.add_opinion('Her','YES'))    
-
     print(tm.add_opinion('Looper','NO'))
     print(tm.add_opinion('Die Hard','YES'))
     print(tm.add_opinion('Mortal engines','NO'))
