@@ -1,2 +1,2 @@
-Genre,imdb,rotten,recommend
-Drama,8.0,94,NO
+director,Runtime,Genre,Subgenre,metacritic,imdb,rotten,recommend
+James Cameron,162,Action,Adventure,7.8,82,83,NO

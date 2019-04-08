@@ -25,7 +25,7 @@ class ChatAgent(Agent):
 			# No tenemos ni intent ni entity
 			self.intent, self.entity = recognize_intent(self.model.userQuery)
 			self.model.userQuery = None
-			if self.entity != "" :
+			if self.entity != "" or self.intent=="ask_for_recommendation":
 				#Tenemos intent y entity 
 				self.passQuery()
 

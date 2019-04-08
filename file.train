@@ -1,5 +1,4 @@
-Genre,rotten,recommend
-Action,86,81,YES
-Action,7.8,82,NO
-Action,7.4,93,NO
-Drama,8.0,94,YES
+director,Runtime,Genre,Subgenre,metacritic,imdb,rotten,recommend
+Spike Jonze,126,Drama,Romance,8.0,94,90,YES
+Christopher Nolan,130,Drama,Mystery,8.5,76,66,YES
+James Cameron,162,Action,Adventure,7.8,82,83,NO

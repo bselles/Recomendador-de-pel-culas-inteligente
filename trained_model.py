@@ -117,7 +117,7 @@ class Trained_Model:
         if line!="":
             
             df= self.__load_df(self.training_data)
-            df.show()
+            #df.show()
 
             
             line = line + "NO\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante
@@ -128,7 +128,7 @@ class Trained_Model:
             
             df1= self.__load_df(self.test_data)
             
-            df1.show()
+            #df1.show()
             
             
             df=df.union(df1)
@@ -138,7 +138,7 @@ class Trained_Model:
             #Obtenemos las inferencias del sistema. "Predice" lo que diría el usuario.
             predictions = self.model.transform(df)
             
-            predictions.show()
+            #predictions.show()
             
             pos= len(predictions.select('recommend').collect())-1
             

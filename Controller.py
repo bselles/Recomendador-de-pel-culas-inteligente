@@ -17,7 +17,7 @@ tm=Trained_Model()
 
 ftr=['Avatar','Looper','Her','War', 'Warcraft', 'Dunkirk', 'The Prestige']
 
-recommended_movies={} #Películas que han gustado al usuario.
+recommended_movies={} #Películas que ya han sido recomendadas.
 not_to_recomend={}
 
 def procesa(intent, entity):
@@ -48,9 +48,8 @@ def procesa(intent, entity):
         
         i=0
         resul = ""
-        while(i<len(ftr) and not (ftr[i] in recommended_movies) and not(ftr[i] in not_to_recomend)  ):
-            if('YES'== tm.get_recommendation(ftr[i])):
-                #print(ftr[i])
+        while(i<len(ftr)  ):
+            if('YES'== tm.get_recommendation(ftr[i]) and not (ftr[i] in recommended_movies) and not(ftr[i] in not_to_recomend) ):
                 recommended_movies[ftr[i]]=True
                 resul = resul + ftr[i] + "\n"
                 i=len(ftr)
