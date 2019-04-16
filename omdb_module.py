@@ -27,15 +27,29 @@ import json
 '''
 
 
+def search_for_movie(title):
+    title=parse_blank_spaces(title)
+    info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&s="+title).read() 
+    return parse_bytes_to_JSON(info)
+
+
+
 
 def get_movie_info(title):
     title=parse_blank_spaces(title)
-    #Añadimos la opción con la trama sin resumir.
-    info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+title+"&plot=full").read() 
-    #Versión con la trama resumida.
-    #info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+title).read() 
-    return parse_bytes_to_JSON(info)
+
+    #Buscamos la película que más se parece a lo que ha introducido el usuario.
+    movie=search_for_movie(title)  
     
+    #Si se obtuvo alguna respuesta
+    if movie['Response'] == 'True':
+        #Añadimos la opción con la trama sin resumir.
+        info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+movie['Search'][0]['Title']+"&plot=full").read() 
+        #Versión con la trama resumida.
+        #info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+title).read() 
+        return parse_bytes_to_JSON(info)
+    else:
+        return "No se ha encontrado ninguna información sobre esa película"
 
 
 def get_summary_plot(title):
@@ -93,7 +107,7 @@ def parse_blank_spaces(data):
     EJEMPLO DE FUNCIONAMIENTO DEL MÓDULO
 '''
 if __name__ == "__main__":
-    print(get_movie_info('Alita'))
+    #print(get_movie_info('aaaaaaaaaaaaaaadsfasdfdsafds'))
     print(get_summary_plot('Gladiator'))
     print(get_actors('Gladiator'))
     print(get_director('Gladiator'))
