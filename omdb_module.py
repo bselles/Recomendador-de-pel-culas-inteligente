@@ -27,64 +27,52 @@ import json
 '''
 
 
+#Devuelve el título de la película que más se parece a lo que ha introducido el usuario.
 def search_for_movie(title):
     title=parse_blank_spaces(title)
     info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&s="+title).read() 
-    return parse_bytes_to_JSON(info)
-
-
+    
+    result= parse_bytes_to_JSON(info)
+    
+    if result['Response']=='True':
+        return result['Search'][0]['Title']
+    else:
+        return ""
+    #Si devuelve "", implica que ubo un error.
 
 
 def get_movie_info(title):
+    #Se supone que el título introducido ya es válido.
     title=parse_blank_spaces(title)
 
     #Buscamos la película que más se parece a lo que ha introducido el usuario.
-    movie=search_for_movie(title)  
+    #movie=search_for_movie(title)  
+    
+    #print(movie)
     
     #Si se obtuvo alguna respuesta
+    '''
     if movie['Response'] == 'True':
         #Añadimos la opción con la trama sin resumir.
-        info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+movie['Search'][0]['Title']+"&plot=full").read() 
+        info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+ parse_blank_spaces(movie['Search'][0]['Title'])+"&plot=full").read() 
         #Versión con la trama resumida.
         #info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+title).read() 
         return parse_bytes_to_JSON(info)
     else:
-        return "No se ha encontrado ninguna información sobre esa película"
+        return ""
+    '''
+    
+    #Añadimos la opción con la trama sin resumir.
+    info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+ parse_blank_spaces(title)+"&plot=full").read() 
+    #Versión con la trama resumida.
+    #info=urllib.request.urlopen(omdb_endpoint + omdb_apikey + "&t="+title).read() 
+    return parse_bytes_to_JSON(info)
 
-
-def get_summary_plot(title):
-    info=get_movie_info(title)
-    return info['Plot']
-
-
-def get_actors(title):
-    info=get_movie_info(title)
-    return info['Actors']
-
-def get_director(title):
-    info=get_movie_info(title)
-    return info['Director']
-
-def get_awards(title):
-    info=get_movie_info(title)
-    return info['Awards']
-
-
-def get_metacritic_score(title):
-    info=get_movie_info(title)
-    return info['Metascore']
-
-def get_imdb_score(title):
-    info=get_movie_info(title)
-    return info['imdbRating']
-
-def get_rottentomatoes_score(title):
-    info=get_movie_info(title)
+def get_rottentomatoes_score(info):
     
     for x in info['Ratings']:
         if (x['Source'] == 'Rotten Tomatoes' ):
-            return x['Value']
-    
+            return x['Value'].replace('%','')
 
 '''
     FUNCIONES AUXILIARES
@@ -107,12 +95,7 @@ def parse_blank_spaces(data):
     EJEMPLO DE FUNCIONAMIENTO DEL MÓDULO
 '''
 if __name__ == "__main__":
-    #print(get_movie_info('aaaaaaaaaaaaaaadsfasdfdsafds'))
-    print(get_summary_plot('Gladiator'))
-    print(get_actors('Gladiator'))
-    print(get_director('Gladiator'))
-    print(get_awards('Gladiator'))
-    print(get_metacritic_score('Gladiator'))
-    print(get_imdb_score('Gladiator'))
-    print(get_rottentomatoes_score('Gladiator'))
+    print(get_movie_info('Gladiator'))
+    #print(search_for_movie('Gladiator'))
+    #print(get_rottentomatoes_score('Gladiator'))
 

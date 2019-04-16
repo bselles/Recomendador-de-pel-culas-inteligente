@@ -55,7 +55,7 @@ class Trained_Model:
         self.model_type="neural_net"
         
         #Parámetros que se utilizarán para el entrenamiento.
-        self.parameters=['director','Runtime','Genre','Subgenre','metacritic','imdb','rotten']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
+        self.parameters=['director','Runtime','Genre','Subgenre','imdb','metacritic','rotten']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
         #self.parameters=['Genre','imdb','rotten']
         #self.parameters=['Genre','Subgenre','metacritic','rotten']
         

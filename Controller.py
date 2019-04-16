@@ -6,23 +6,10 @@
 
 
 from intent_recognition import recognize_intent
-from omdb_module import get_movie_info, get_summary_plot, get_actors,get_director, get_awards,get_metacritic_score, get_imdb_score, get_rottentomatoes_score
+from omdb_module import get_movie_info , search_for_movie ,get_rottentomatoes_score#, get_summary_plot, get_actors,get_director, get_awards,get_metacritic_score, get_imdb_score, get_rottentomatoes_score
 from trained_model import Trained_Model
 from pathlib import Path
 
-
-
-#Variables globales
-
-'''
-tm=Trained_Model()
-
-
-ftr=['Avatar','Looper','Her','War', 'Warcraft', 'Dunkirk', 'The Prestige']
-
-recommended_movies={} #Películas que ya han sido recomendadas.
-not_to_recomend={}
-'''
 
 class Controller:
     
@@ -60,7 +47,8 @@ class Controller:
         if not Path(filename).is_file():
             #creamos el fichero si no existe
             with open(filename, "w+") as myfile:
-               myfile.write("\n")
+               #No sucederá nada. Solo se creará el fichero.
+               print(filename+' created')
             
             #Devolvemos un diccionario vacío porque el fichero no contenía ninguna película.
             return {}
@@ -80,23 +68,10 @@ class Controller:
    
 
     def procesa(self,intent, entity):
-        if(intent=="ask_for_general_info"):
-            return get_movie_info(entity)
-        elif(intent=="ask_for_plot"):
-            return get_summary_plot(entity)
-        elif(intent=="ask_for_actors"):
-            return get_actors(entity)
-        elif(intent=="ask_for_director"):
-            return get_director(entity)
-        elif(intent=="ask_for_awards"):
-            return get_awards(entity)
-        elif(intent=="ask_for_metacritic_score"):
-            return get_metacritic_score(entity)
-        elif(intent=="ask_for_imdb_score"):
-            return get_imdb_score(entity)
-        elif(intent=="ask_for_rotten_score"):
-            return get_rottentomatoes_score(entity)
-        elif(intent=="not_good_opinion"):
+        
+        #Si el intent no tiene que ver con obtener información sobre una película.
+        
+        if(intent=="not_good_opinion"):
             self.not_to_recomend[entity]=True
             self.tm.add_opinion(entity,'NO')
             return "Thanks for giving your opinon"
@@ -115,33 +90,106 @@ class Controller:
                 i=i+1
             return resul
             '''
-        elif(intent=="ask_for_score"):
-            #return get_movie_info(entity))
-            return "MOSTRARIA NOTAS"
-        else:
-            return "El intent no se ha encontrado correctamente"
-    
-    
-    
-    
+            return ""
+        
+        #Si el intent tiene que ver con obtener información sobre una película.
+        
+        #Obtenemos la película a la que se refería el usuario con la entrada.
+        title=search_for_movie(entity)
+        
+        print(title)
+        
+        
+        if title == "":
+            #No se ha encontrado ningún resultado para esa película.
+            return "Sorry, I don't know which film you're talking about."
+        
+        #Obtenemos la información de la película introducida por el usuario.
+        info=get_movie_info(title)
+        
+        if(intent=="ask_for_general_info"):
+            return self.__parse_general_info(info)
+        elif(intent=="ask_for_plot"):
+            return 'Here you go a summary of the plot of '+ title +':\n'+ info['Plot']
+        elif(intent=="ask_for_actors"):
+            return 'The main stars that appear in ' +  title + ' are '+ info['Actors']
+        elif(intent=="ask_for_director"):
+            return 'The director of '+ title + ' is '+ info['Director']
+        elif(intent=="ask_for_awards"):
+            return 'These are the awards that '+ title +' won:\n' + info['Awards']
+        elif(intent=="ask_for_metacritic_score"):            
+            score=float(info['Metascore'])
+            
+            if(score>8):
+                return 'It seems that the people from Metacritic enjoyed this film. It have a '+ str(score)
+            elif(score>6):
+                return 'It has a '+ str(score)+". Seems that they kind of like it but its not the best film they've seen."
+            else:
+                return "They don't seem to like it a lot. It has a "+ str(score) 
+            
+        elif(intent=="ask_for_imdb_score"):
+            
+            score=float(info['imdbRating'])
+            
+            if(score>8):
+                return 'It seems that the people from IMDB enjoyed this film. It have a '+ str(score)
+            elif(score>6):
+                return 'It has a '+ str(score)+". Seems that they kind of like it but its not the best film they've seen."
+            else:
+                return "They don't seem to like it a lot. It has a "+ str(score)
 
+        elif(intent=="ask_for_rotten_score"):
+            
+            score=float( get_rottentomatoes_score(info))
+            
+            if(score>8):
+                return 'It seems that the people from IMDB enjoyed this film. It have a '+ str(score)
+            elif(score>6):
+                return 'It has a '+ str(score)+". Seems that they kind of like it but its not the best film they've seen."
+            else:
+                return "They don't seem to like it a lot. It has a "+ str(score) 
+            
+        elif(intent=="ask_for_score"):
+            result= "Well, I don't know what people think about this film but I can tell you which scores do this movie have in different sites.\n"
+            
+            result= result+ "Rottentomatoes score: " + get_rottentomatoes_score(info) + "\n"
+            result= result+ "IMDB score: " + info['imdbRating'] + "\n"
+            result= result+ "Metacritic score: " + info['Metascore'] + "\n"
+
+        
+        
+            return result
+        else:
+            return "I don't understand what you're asking for. Can you repeat it in a different way?"
+    
+    
+    
+    def __parse_general_info(self,info):        
+        return info
+            
+            
+            
+        
+        
+        
 
 if __name__ == "__main__" :
 
     c=Controller()
     
-    '''
+    
     while True:
         example= input('Insert here: \n')
     
         intent, entity= recognize_intent(example)
     
         print(intent)
+        print(entity)
         if(entity=="" and intent!="ask_for_recommendation"):
             entity=input("Which film are you talking about?  \n")
         
-        #print(procesa(intent, entity))
-    '''
+        print(c.procesa(intent, entity))
+    
 
     
     
