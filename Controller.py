@@ -51,19 +51,18 @@ class Controller:
         
         #Leemos todas las películas.
         with open(self.pr_filename, "r") as f:
-                lines = f.readlines()
-        
+            lines = f.readlines()
+                
         #Insertamos las pr_size primeras películas en el diccionario.
-        for x in range(0,self.pr_size):
-            result[x]=lines[x]
+        for x in range(self.pr_size):
+            result[x]=lines[x].strip('\n')
         
         #Eliminamos las películas del fichero.
-        
-        with open(self.pr_filename, "r") as f:
-            lines = f.readlines()
+        #with open(self.pr_filename, "r") as f:
+        #    lines = f.readlines()
         
         with open(self.pr_filename, "w") as f:
-            for x in range(self.pr_size,len(lines)):
+            for x in range(self.pr_size-1,len(lines)):
                 f.write(lines[x])
 
         return result
@@ -106,7 +105,7 @@ class Controller:
             
             while True:
                 #Generamos un número aleatorio.
-                index=random.randint(0,self.pr_size)
+                index=random.randint(0,self.pr_size-1)
                 
                 #Obtenemos la película asociada a esa posición aleatoria.
                 film=self.pot_rec[index]
@@ -118,19 +117,18 @@ class Controller:
                     
                     if (title == ""):
                         self.pot_rec[index]=self.__get_first_and_delete()                  
-                    
                     if ('YES'== self.tm.get_recommendation(title)):
                         self.pot_rec[index]=self.__get_first_and_delete()                  
-                        if not(title in self.not_to_recommend) and not (title in self.recommended_movies):
+                        if not(title in self.not_to_recommend.keys()) and not (title in self.recommended_movies.keys()):
                             #Añadimos la película como recomendada.
                             self.recommended_movies[title]=None
                             return title
                         
-                except:
-                    
+                except Exception as e:
+                    print(index)
                     #Si hubo algún problema, sustituimos la película actual por una nueva.
                     self.pot_rec[index]=self.__get_first_and_delete()                  
-
+                    print(e)
                     print('Error con la película '+ str(film))
                 
             
@@ -231,7 +229,7 @@ class Controller:
             lines = f.readlines() 
                 
         result=lines[0].strip('\n')
-                        
+        
         with open("file.txt", "w") as f:
             count = range(1,len(lines))
             for i in  count:
