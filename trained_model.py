@@ -3,16 +3,32 @@
 
 '''
     Módulo asociado al sistema de inferencia de recomendaciones 
+    
+    Este módulo contiene la clase que representa el modelo de aprendizaje del sistema. Dicho de otra forma,
+    este módulo almacena la clase que se encargará de aprender a partir de los gustos del usuario para realizar
+    mejores recomendaciones.
+    
+    Para ello, utiliza las opiniones que el usuario ha introducido previamente. Cada vez que el usuario da una opinión sobre 
+    una película (si le ha gustado o no), el sistema busca información sobre dicha película y analiza distintas características 
+    de la película como su duración, el género, su director, etc para ver qué ha determinado que le guste o no.
+    
+    El sistema, para lograr su aprendizaje, aplica algoritmos de Aprendizaje Automático sobre las opiniones introducidas por el usuario
+    (y las correspondientes características asociadas a la película). Actualmente, el sistema soporta 4 métodos:
+        
+        1-Aprendizaje mediante clustering (algoritmo kNN).
+        2-Aprendizaje mediante un árbol de clasificación.
+        3-Aprendizaje mediante regresión logística.
+        4-Aprendizaje mediante el uso de una red neuronal.
+        
+    Para seleccionar un tipo de aprendizaje u otro, se debe indicar el tipo deseado en el parámetro (atributo de la clase) "model_type".
+    
 '''
 
-'''
-    -IMPORTANTE QUE FILE.TEST Y FILE.TRAIN TENGAN UN EJEMPLO DE CADA CLASE.
-'''
-
-
+#Imports necesarios para el funcionamiento del sistema.
 from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.ml.classification import LogisticRegression, DecisionTreeClassifier, MultilayerPerceptronClassifier 
+from pyspark.ml.clustering import KMeans
 from pyspark.ml.feature import VectorAssembler, StringIndexer
 from pyspark.sql.types import IntegerType
 
@@ -29,30 +45,9 @@ class Trained_Model:
         '''
           
         #Asociados a la sesión Spark.
-        #self.spark_session
-        self.session_name="SparkML" 
+        self.session_name="SparkML"  #Nombre de la sesión de Spark
         
         #Asociados al entrenamiento del modelo mediante SparkML.
-        self.numeric_columns=['Runtime','imdb','rotten','metacritic']
-        self.string_columns=['director','Genre','Subgenre','recommend']
-        
-        #self.numeric_columns=['imdb','rotten']
-        #self.string_columns=['Genre','recommend']
-        
-        
-        #self.numeric_columns=['metacritic','rotten']
-        #self.string_columns=['Genre','Subgenre','recommend']
-        
-        
-        self.incomplete_sign='NULL'
-        
-        self.label_column="label"
-        self.result_column="prediction"
-        self.features_column="features"
-        
-        #En función del valor de este campo, utilizará una técnica u otra para entrenar el sistema.
-        #Los posibles valores son regresión logística, árbol de clasificación y red neuronal.
-        self.model_type="neural_net"
         
         #Parámetros que se utilizarán para el entrenamiento.
         
@@ -62,11 +57,30 @@ class Trained_Model:
         En función del orden en el que se ubiquen en la lista, aparecerán escritos en la cabecera de los ficheros de una forma u otra.
         '''
         
-        self.parameters=['director','Runtime','Genre','Subgenre','imdb','rotten','metacritic']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
-        #self.parameters=['Genre','imdb','rotten']
-        #self.parameters=['Genre','Subgenre','metacritic','rotten']
+        self.parameters=['director','Runtime','Genre','Subgenre','imdb','rotten','metacritic']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.        
         
+        self.numeric_columns=['Runtime','imdb','rotten','metacritic']         #Parámetros numericos que se van a utilizar.
+        self.string_columns=['director','Genre','Subgenre','recommend']       #Parámetros no numericos (cadenas de caracteres) que se van a utilizar en el entrenamiento del modelo.
         
+        self.incomplete_sign='NULL'         #Símbolo que identifica las posiciones del datafraque no tienen ningún valor. 
+        
+        self.label_column="label"           #Nombre de la columna del dataframe asociada a la etiqueta (label)
+        self.result_column="prediction"     #Nombre de la columna del dataframe asociada a la predicción realizada por el sistema.
+        self.features_column="features"     #Nombre de la columna que almacenará el vector de características que utilizará el sistema para su aprendizaje.
+        
+        #En función del valor de este campo, utilizará una técnica u otra para entrenar el sistema.
+        
+        '''
+            POSIBLES VALORES:
+                1.Red neuronal: neural_net
+                2.Árbol de decisión: classification_tree
+                3.Clustering mediante kNN: clustering
+                4.Regresion logística: logistic_regression
+        '''
+        
+        self.model_type="clustering"
+        
+       
         #Nombre del fichero dónde de almacenarán los ejemplos de entrenamiento.
         self.training_data= "file.train"                                       
         
@@ -81,9 +95,7 @@ class Trained_Model:
         '''
         
         df=self.__load_df(self.training_data) #Cargamos los ejemplos de entrenamiento del sistema.
-        #df=self.__set_types(df)
-        
-        df=self.__prepare_df(df)
+        df=self.__prepare_df(df)    #Realizamos las transformaciones necesarias al df cargado para que el sistema lo pueda usar para aprender.
         
         #En función del modelo seleccionado utilizará un tipo de aprendizaje u otro.
         if self.model_type== "logistic_regression":
@@ -92,71 +104,85 @@ class Trained_Model:
             self.model = self.__train_with_decision_tree(df)
         elif self.model_type == "neural_net":
             self.model = self.__train_with_multilayer_perceptron_classifier(df,[len(self.parameters), 5,4, 2], self.max_iter, 128, 1234)
-            
-            
-        '''
-        RELLENAR EL ELSE RED NEURONAL ---> TODO
-        '''
+        elif self.model_type == "clustering":
+            self.model = self.__train_with_clustering(df)
     
     '''
         FUNCIONALIDADES PRINCIPALES DEL SISTEMA
     '''
     
-    #Opinion es 'YES' o 'NO'
+    '''
+        1- AÑADIR LA OPINIÓN DEL USUARIO
+        
+        Dado el nombre de una película y si le ha gustado al usuario (YES/NO), el sistema utiliza esta nueva información para entrenar 
+        su modelo de aprendizaje. De esta forma, analiza las caracteristicas de la película para determinar el peso de cada factor a la 
+        hora de determinar la opinión del usuario y así realizar mejores recomendaciones en el futuro.
+        
+        Input:
+            - film_name: cadena de caracteres que representa el nombre de la película.
+            - opinion: cadena de caracteres que representa la opinión del usuario. Puede valer YES o NO.
+    
+    
+        Output:
+            -Cadena de caracteres cuyo valor puede ser:
+                - "" en el caso de que haya ocurrido algún error.
+                - "OK" en el caso de que no haya ningún error.
+    '''
     def add_opinion(self,film_name, opinion):
         return self.__add_training_info(film_name,opinion)
         
-        
-    #SUPONEMOS QUE LA PELÍCULA EXISTE
     
+    '''       
+        2- OBTENER UNA RECOMENDACIÓN POR PARTE DEL SISTEMA
+    
+        Dado el nombre de una película, el sistema, utilizando todo lo que ha aprendido previamente, indica si la recomendaría o no.
+        
+        Input:
+            -film_name: cadena de caracteres que representa el nombre de la película.
+            
+        Output:
+            Devuelve una cadena de caracteres cuyo valor puede ser:
+                -"" en el caso de que haya sucedido algún error.
+                -"NO" en el caso de que el sistema infiera que no debe recomendar la película introducida.
+                -"YES" en el caso de que el sistema infiera que debe recomendar la película introducida.
     '''
-        
-        Devuelve "" en caso de error.
-        
-        Devuelve YES o NO en caso contrario.
-    '''
-    def get_recommendation(self,film_name):
-        
+    
+    def get_recommendation(self,film_name):    
         #Obtenemos la línea que se escribirá en el test_data
         line = self.__get_film_info(film_name)
-        
+    
+    
         #Si se ha encontrado la película...
         if line!="":
             
-            df= self.__load_df(self.training_data)
-            #df.show()
-
-            
+            df= self.__load_df(self.training_data) #Cargamos el dataframe que usamos para inferir la recomendación
             line = line + "NO\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante
             
+            #Reescribimos el fichero de test.
             self.__write_header(self.test_data)
+            
+            #Escribimos el ejemplo que queremos predecir.
             with open(self.test_data, "a") as myfile:
                 myfile.write(line)
             
+            #Lo unimos a los casos previos para obtener una predicción más precisa.
             df1= self.__load_df(self.test_data)
-            
-            #df1.show()
-            
-            
             df=df.union(df1)
-            
-            df=self.__prepare_df(df)
+            df=self.__prepare_df(df) #Realizamos las modificaciones oportunas para que se pueda procesar el df.
             
             #Obtenemos las inferencias del sistema. "Predice" lo que diría el usuario.
             predictions = self.model.transform(df)
-            
-            #predictions.show()
-            
+
+            #Posición en la que se va ubicar la predicción del ejemplo que nos interesa.            
             pos= len(predictions.select('recommend').collect())-1
-            
-            
+                        
             #Devolvemos la recomendación.Devolvemos la que se encuentra el la última posición.
             return self.__switch_label(predictions.select('recommend').collect()[pos]['recommend'] \
                                        , predictions.select('prediction').collect()[pos][self.result_column]\
                                        ,predictions.select(self.label_column).collect()[pos][self.label_column])
             
         else:
-            #Si no se ha encontrado la película, devolvemos "".
+            #Si no se ha encontrado la película (si ha sucedido algún error), devolvemos "".
             return ""
         
     '''
@@ -209,9 +235,8 @@ class Trained_Model:
                self.model = self.__train_with_decision_tree(df)
             elif self.model_type == "neural_net":
                 self.model = self.__train_with_multilayer_perceptron_classifier(df, [ len(self.parameters), 5,4, 2], self.max_iter, 128, 1234)
-            '''
-                TODO------------->
-            '''
+            elif self.model_type == "clustering":
+                self.model = self.__train_with_clustering(df)
             
             return "OK"
         else:
@@ -225,7 +250,6 @@ class Trained_Model:
             .appName(self.session_name) \
             .getOrCreate()
     
-        #return self.spark_session.read.option("header", "true").option("inferSchema", "true").csv(filename)
         return self.spark_session.read.option("header", "true").csv(filename)
     
     
@@ -275,10 +299,17 @@ class Trained_Model:
     def __train_with_decision_tree(self,df):
         dt = DecisionTreeClassifier(maxBins=30000, labelCol="label", featuresCol="features")
         return dt.fit(df)
-   
+
+    #Devuelve el modelo entrenado.   
     def __train_with_multilayer_perceptron_classifier(self,df,layers, max_iter, block_size, seed, labelCol="label", featuresCol="features" ):
         trainer = MultilayerPerceptronClassifier(maxIter=max_iter, layers=layers, blockSize=block_size, seed=seed)
         return trainer.fit(df)
+    
+    
+    
+    def __train_with_clustering(self,df):
+        kmeans = KMeans().setK(2).setSeed(1)
+        return kmeans.fit(df)
     
     def __prepare_dataframes_transformers(self):
         transformers_list=[]
@@ -344,24 +375,4 @@ class Trained_Model:
                 rotten_ratio=x['Value'].replace('%','')
                 line= line + rotten_ratio + ","  
                 
-        return line
-    
-    
-if __name__ == "__main__":
-    tm=Trained_Model()
-
-    print(tm.add_opinion('Her','YES'))    
-    print(tm.add_opinion('Looper','NO'))
-    print(tm.add_opinion('Die Hard','YES'))
-    print(tm.add_opinion('Mortal engines','NO'))
-    print(tm.add_opinion('Alita','NO'))
-    print(tm.add_opinion('Black Panther','NO'))
-
-    
-    print(tm.get_recommendation('Her'))
-    print(tm.get_recommendation('Looper'))
-    print(tm.get_recommendation('Black Panther'))
-    print(tm.get_recommendation('Mortal Engines'))
-    print(tm.get_recommendation('Die Hard'))
-
-    
+        return line    

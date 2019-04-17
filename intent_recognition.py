@@ -7,9 +7,13 @@
    todas las contempladas por el sistema. 
    
    Además, devuelve la entidad (si la encuentra) asociada a dicha intención.
+   
+   Para ello, utiliza el modelo entrenado que se encuentra en intent_recognition_model/models/current/nlu.
+   Se ha entrenado utilizando el fichero modelconfiguration.ipynb. Para abrirlo, se debe utilizar Anaconda's Jupyter Notebook.
+   
 '''
 
-#Imports necesarios
+#Imports necesarios para el sistema
 from rasa_nlu.model import Interpreter
 import warnings
 import tensorflow as tf
@@ -23,12 +27,13 @@ tf.logging.set_verbosity(tf.logging.ERROR) #Suprimimos los mensajes informativos
     PARAMETROS DE CONFIGURACIÓN
 '''
 
+#Indica la ubicación del modelo que se ha entrenado.
 model_location="./intent_recognition_model/models/current/nlu"
+
 
 '''
     FUNCIONALIDADES DEL MÓDULO
 '''
-
 
 '''
    1- RECONOCER UN INTENT:
@@ -55,6 +60,8 @@ def recognize_intent(user_input):
         entity=""
     
     return (result['intent']['name'],entity)
+
+
 
 '''
     CASOS DE PRUEBA

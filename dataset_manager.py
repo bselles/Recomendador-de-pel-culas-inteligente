@@ -2,38 +2,28 @@
 
 
 """
-    PARA PROCESAR EL DATASET DE KAGGLE.COM    
+    Script en python para procesar el dataset de Kaggle.com con 5000 películas de TMDB
+    
+    Enlace de descarga del dataset: https://www.kaggle.com/tmdb/tmdb-movie-metadata 
+    
+    Este script, extrae los nombres de las películas que aparecen en el dataset.
+    
+    Estas, serán las 5000 películas que nuestro sistema podrá recomendar al usuario.    
 """
-
-#from omdb_module import search_for_movie
-
 
 filename= 'datasets/tmdb_5000_credits.csv'
 output_filename= 'datasets/filmsdb'
+
+#Leemos el contenido del dataset.
 with open(filename, "r") as myfile:
    #Obtenemos la línea asociada
    content=myfile.readlines()
    
-   #Obtenemos de la línea, el nombre de la película.
-   
+#Obtenemos de la línea, el nombre de la película.
 for x in content:
    title=x.split(',')[1]
    
    try:
-       '''
-       #Buscamos el título en la base de datos de omdb
-       title_result=search_for_movie(title)
-       
-       if title_result!="":
-           #Si no hubo ningun error, escribimos el el fichero de salida.
-           with open(output_filename, "a") as myfile:
-               myfile.write(title_result+'\n')
-       
-       else:
-           #Si hubo algún error.
-           print('No se encontró la película '+ title)
-   
-       '''
        with open(output_filename, "a") as myfile:
            myfile.write(title+'\n')
    except:
