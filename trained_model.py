@@ -33,7 +33,7 @@ class Trained_Model:
         self.session_name="SparkML" 
         
         #Asociados al entrenamiento del modelo mediante SparkML.
-        self.numeric_columns=['Runtime','metacritic','imdb','rotten']
+        self.numeric_columns=['Runtime','imdb','rotten','metacritic']
         self.string_columns=['director','Genre','Subgenre','recommend']
         
         #self.numeric_columns=['imdb','rotten']
@@ -55,7 +55,14 @@ class Trained_Model:
         self.model_type="neural_net"
         
         #Parámetros que se utilizarán para el entrenamiento.
-        self.parameters=['director','Runtime','Genre','Subgenre','imdb','metacritic','rotten']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
+        
+        '''
+        Deben seguir el siguiente orden (aparezcan o no):
+        title, director,Runtime, Genre,Subgenre, imdb,rotten,metacritic.
+        En función del orden en el que se ubiquen en la lista, aparecerán escritos en la cabecera de los ficheros de una forma u otra.
+        '''
+        
+        self.parameters=['director','Runtime','Genre','Subgenre','imdb','rotten','metacritic']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.
         #self.parameters=['Genre','imdb','rotten']
         #self.parameters=['Genre','Subgenre','metacritic','rotten']
         

@@ -2,3 +2,6 @@ director,Runtime,Genre,Subgenre,metacritic,imdb,rotten,recommend
 Spike Jonze,126,Drama,Romance,8.0,94,90,YES
 Christopher Nolan,130,Drama,Mystery,8.5,76,66,YES
 James Cameron,162,Action,Adventure,7.8,82,83,NO
+Ridley Scott,155,Action,Adventure,8.5,76,67,YES
+Ridley Scott,155,Action,Adventure,8.5,76,67,NO
+Ridley Scott,155,Action,Adventure,8.5,76,67,NO

@@ -9,7 +9,7 @@ from intent_recognition import recognize_intent
 from omdb_module import get_movie_info , search_for_movie ,get_rottentomatoes_score#, get_summary_plot, get_actors,get_director, get_awards,get_metacritic_score, get_imdb_score, get_rottentomatoes_score
 from trained_model import Trained_Model
 from pathlib import Path
-
+import random
 
 class Controller:
     
@@ -34,8 +34,39 @@ class Controller:
         
         print(self.not_to_recommend)
         
+        
+        #potential recomendations size. Numero de películas que aspirarán a ser recomendadas en cada selección aleatoria. El parámetro es configurable.
+        self.pr_size=500
+        self.pr_filename='prfn'
+        
+        self.pot_rec= self.__init_potential_recom()
+        
         #Modelo que se entrenará para que el sistema infiera buenas recomendaciones.
         self.tm = Trained_Model() 
+        
+        
+    def __init_potential_recom(self):
+        
+        result={}
+        
+        #Leemos todas las películas.
+        with open(self.pr_filename, "r") as f:
+                lines = f.readlines()
+        
+        #Insertamos las pr_size primeras películas en el diccionario.
+        for x in range(0,self.pr_size):
+            result[x]=lines[x]
+        
+        #Eliminamos las películas del fichero.
+        
+        with open(self.pr_filename, "r") as f:
+            lines = f.readlines()
+        
+        with open(self.pr_filename, "w") as f:
+            for x in range(self.pr_size,len(lines)):
+                f.write(lines[x])
+
+        return result
 
     '''
         Dado el nombre de un fichero que contiene nombres de películas, devuelve un diccionario cuyas claves serán esos nombres y su valor será NULL.
@@ -71,38 +102,61 @@ class Controller:
         
         #Si el intent no tiene que ver con obtener información sobre una película.
         
-        if(intent=="not_good_opinion"):
-            self.not_to_recomend[entity]=True
-            self.tm.add_opinion(entity,'NO')
-            return "Thanks for giving your opinon"
-        elif(intent=="good_opinion"):
-            self.tm.add_opinion(entity,'YES')
-            return "Thanks for giving your opinon"
-        elif(intent=="ask_for_recommendation"):
-            '''
-            i=0
-            resul = ""
-            while(i<len(self.ftr)  ):
-                if('YES'== self.tm.get_recommendation(self.[i]) and not (self.ftr[i] in recommended_movies) and not(ftr[i] in not_to_recomend) ):
-                    recommended_movies[ftr[i]]=True
-                    resul = resul + ftr[i] + "\n"
-                    i=len(ftr)
-                i=i+1
-            return resul
-            '''
-            return ""
-        
-        #Si el intent tiene que ver con obtener información sobre una película.
+        if(intent=="ask_for_recommendation"):
+            
+            while True:
+                #Generamos un número aleatorio.
+                index=random.randint(0,self.pr_size)
+                
+                #Obtenemos la película asociada a esa posición aleatoria.
+                film=self.pot_rec[index]
+                
+                #Nos aseguramos de que la película sea válida.
+                try:
+                    #Buscamos el título que tiene asociado en IMDB
+                    title=search_for_movie(film)
+                    
+                    if (title == ""):
+                        self.pot_rec[index]=self.__get_first_and_delete()                  
+                    
+                    if ('YES'== self.tm.get_recommendation(title)):
+                        self.pot_rec[index]=self.__get_first_and_delete()                  
+                        if not(title in self.not_to_recommend) and not (title in self.recommended_movies):
+                            #Añadimos la película como recomendada.
+                            self.recommended_movies[title]=None
+                            return title
+                        
+                except:
+                    
+                    #Si hubo algún problema, sustituimos la película actual por una nueva.
+                    self.pot_rec[index]=self.__get_first_and_delete()                  
+
+                    print('Error con la película '+ str(film))
+                
+            
+            return "" #Implica error.        
         
         #Obtenemos la película a la que se refería el usuario con la entrada.
         title=search_for_movie(entity)
         
-        print(title)
-        
-        
         if title == "":
             #No se ha encontrado ningún resultado para esa película.
             return "Sorry, I don't know which film you're talking about."
+        
+        if(intent=="not_good_opinion"):
+            
+            #Almacenamos que esa película no le gusta para no recomendarsela en un futuro.
+            self.not_to_recommend[title]=None
+            self.__write_on_file(self.not_to_rec_filename,title)
+            
+            self.tm.add_opinion(entity,'NO')
+            return "It seems you don't like "+ title+".I'll remember it"
+        elif(intent=="good_opinion"):
+            self.tm.add_opinion(entity,'YES')
+            return "Did you like it? Perfect. I'll remember it :)"
+
+        
+        #Si el intent tiene que ver con obtener información sobre una película.
         
         #Obtenemos la información de la película introducida por el usuario.
         info=get_movie_info(title)
@@ -166,10 +220,24 @@ class Controller:
     
     def __parse_general_info(self,info):        
         return info
+    
+    def __write_on_file(self,filename, film):        
+         with open(filename, "a") as myfile:
+                myfile.write(film+'\n')
             
-            
-            
-        
+    
+    def __get_first_and_delete(self):
+        with open(self.pr_filename, "r") as f:
+            lines = f.readlines() 
+                
+        result=lines[0].strip('\n')
+                        
+        with open("file.txt", "w") as f:
+            count = range(1,len(lines))
+            for i in  count:
+                f.write(lines[i])
+                
+        return result
         
         
 
