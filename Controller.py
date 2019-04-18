@@ -26,17 +26,12 @@ class Controller:
         #Información asociada a las consultas previas del usuario.
         self.recommended_filename='rmdb'
         self.recommended_movies=self.__init_names_dict(self.recommended_filename)      #Películas que le han recomendado previamente.
-        
-        print(self.recommended_movies)
-        
+                
         self.not_to_rec_filename='ntrmdb'
         self.not_to_recommend=self.__init_names_dict(self.not_to_rec_filename)         #Películas que ha dicho de forma explícita que no le gustan.
         
-        print(self.not_to_recommend)
-        
-        
         #potential recomendations size. Numero de películas que aspirarán a ser recomendadas en cada selección aleatoria. El parámetro es configurable.
-        self.pr_size=500
+        self.pr_size=50
         self.pr_filename='prfn'
         
         self.pot_rec= self.__init_potential_recom()
@@ -120,8 +115,11 @@ class Controller:
                     if ('YES'== self.tm.get_recommendation(title)):
                         self.pot_rec[index]=self.__get_first_and_delete()                  
                         if not(title in self.not_to_recommend.keys()) and not (title in self.recommended_movies.keys()):
-                            #Añadimos la película como recomendada.
+                            #Añadimos la película como recomendada en el diccionario.
                             self.recommended_movies[title]=None
+                            #Añadimos la película como recomendada en el fichero.
+                            self.__write_on_file(self.recommended_filename,title)
+
                             return title
                         
                 except Exception as e:
@@ -230,7 +228,7 @@ class Controller:
                 
         result=lines[0].strip('\n')
         
-        with open("file.txt", "w") as f:
+        with open(self.pr_filename, "w") as f:
             count = range(1,len(lines))
             for i in  count:
                 f.write(lines[i])

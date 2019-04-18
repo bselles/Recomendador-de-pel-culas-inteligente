@@ -151,10 +151,8 @@ class Trained_Model:
         #Obtenemos la línea que se escribirá en el test_data
         line = self.__get_film_info(film_name)
     
-    
         #Si se ha encontrado la película...
         if line!="":
-            
             df= self.__load_df(self.training_data) #Cargamos el dataframe que usamos para inferir la recomendación
             line = line + "NO\n" #Añadimos el campo asociado a la recomendación. Su valor es irrelevante
             
@@ -189,6 +187,22 @@ class Trained_Model:
         FUNCIONES AUXILIARES DEL SISTEMA
     '''
 
+
+    '''
+        Dada la predicción que realiza el sistema, la etiqueta asociada a la predicción y etiqueta del entrenamiento devuelve
+        si el sistema infiere que se debe recomendar la película o no.
+        
+        Input:
+            -recommend: etiqueta asociada al entrenamiento.
+            -prediction: predicción realizada por el sistema.
+            -label: etiqueta asociada a la predicción.
+    
+        Output:
+            cadena de caracteres cuyo valor puede ser 'YES' o 'NO'
+    
+    
+    '''
+    
     def __switch_label(self, recommend,prediction,label):
         if prediction==label:
             return recommend
@@ -199,10 +213,18 @@ class Trained_Model:
                 return 'YES'
 
     '''
-        Si hubo un error, devuelve "".
-        Si no, devuelve "OK"
-    '''
+        Dado el nombre de una película y si le ha gustado o no al usuario (YES/NO), añade esta opinión (y la información
+        asociada a esa película) a los datos que usa el modelo del sistema para entrenarse y aprender.
     
+        Input:
+            -film_name: nombre de la película.
+            -recommend: cadena de caracteres cuyo valor sea 'YES' o 'NO'.
+                
+        Output:
+            "" en el caso de que haya algún error.
+            'OK' en caso contrario.
+    '''
+
     def __add_training_info(self,film_name, recommend):
         line = self.__get_film_info(film_name)
         
@@ -210,11 +232,9 @@ class Trained_Model:
         if line!="":
             line = line + recommend +"\n" 
             
-            #Si no existe, lo crea. Lo parsea.
-            
-            #Escribimos la cabecera.
-            my_file = Path(self.training_data)
-            if not my_file.is_file():
+            #Si no existe, crea el fichero de entrenamiento.
+            if not Path(self.training_data).is_file():
+                #Escribimos la cabecera.
                 self.__write_header(self.training_data)
             
             #Escribimos la línea.
@@ -223,12 +243,9 @@ class Trained_Model:
                 
             #Si no hubo un error, se reentrena el modelo del sistema.
             df=self.__load_df(self.training_data)
-            #df= self.__set_types(df)
-            df=self.__prepare_df(df) 
-            #df.show()
+            df=self.__prepare_df(df) #Transforma el df para que sea apto para el aprendizaje.
             
-            #Por ahora usa regresión logística.
-            
+            #En función del tipo de entrenamiento seleccionado, realizará uno u otro.
             if self.model_type=="logistic_regression":
                 self.model=self.__train_with_logistic_regression(df)
             elif self.model_type == "classification_tree":
@@ -242,7 +259,9 @@ class Trained_Model:
         else:
             return ""
         
-        
+    '''
+        Dado un fichero csv, crea un df sin formatear.
+    '''
     def __load_file(self,filename):
         #Creamos la sesión del df.
         self.spark_session = SparkSession \
@@ -253,6 +272,9 @@ class Trained_Model:
         return self.spark_session.read.option("header", "true").csv(filename)
     
     
+    '''
+        Dado un fichero, añade la cabecera asociada a los parámetros que utiliza el modelo para entrenar al sistema. Estos parámetros son los que aparecen en self.parameters.
+    '''
     def __write_header(self,filename):
         line=""
         for x in self.parameters:
@@ -262,7 +284,10 @@ class Trained_Model:
         with open(filename, "w+") as myfile:
                    myfile.write(line)
                    
-    
+    '''
+        Dado un fichero csv, crea un spark Dataframe eliminando las instancias incompletas (que tienen NULL en alguna posición) y lo procesa para eliminar errores de 
+        tipos.
+    '''
     def __load_df(self,filename):
         #Si no existe lo creamos.
         my_file = Path(filename)
@@ -273,44 +298,75 @@ class Trained_Model:
         
         
         df=self.__load_file(filename)   #Cargamos el dataframe.
-        df=self.__filter_incomplete_instances(df) #Eliminamos las instancias incompletas (aquellas que contienen '?' en algún campo).
-        
+        df=self.__filter_incomplete_instances(df) #Eliminamos las instancias incompletas.
         df=self.__set_types(df)
         
         return df
     
+    
+    '''
+        Dado un dataframe, elimina las instancias incompletas. Las instancias incompletas son aquellas que contiene  self.incomplete_sign.
+    '''
     def __filter_incomplete_instances(self,df):
         for x in self.string_columns:
             df=df.filter(df[x]!=self.incomplete_sign)
         return df
     
+    '''
+        Dado un dataframe, elimina las incompatibilidades de tipos. Asocia los tipos correspondientes a cada columna.
+    '''
     def __set_types(self,df):
         for x in self.numeric_columns:
             df=df.withColumn(x+"Tmp",df[x].cast(IntegerType())).drop(x).withColumnRenamed(x+"Tmp",x)
      
         return df
     
-    #Devuelve el modelo entrenado.
+    '''
+        Dado un dataframe, entrena un modelo que utiliza regresión logística para inferir recomendaciones.
+        
+        Devuelve un modelo entrenado con los datos proporcionados que se usará en el futuro para realizar 
+        recomendaciones.
+    '''
     def __train_with_logistic_regression(self,df):
         lr = LogisticRegression(maxIter=self.max_iter, labelCol="label", featuresCol="features")
         return lr.fit(df)
     
-    #Devuelve el modelo entrenado.
+    '''
+        Dado un dataframe, entrena un modelo que utiliza un árbol de clasificación para inferir recomendaciones.
+        
+        Devuelve un modelo entrenado con los datos proporcionados que se usará en el futuro para realizar 
+        recomendaciones.
+    '''    
     def __train_with_decision_tree(self,df):
         dt = DecisionTreeClassifier(maxBins=30000, labelCol="label", featuresCol="features")
         return dt.fit(df)
 
-    #Devuelve el modelo entrenado.   
+    '''
+        Dado un dataframe, entrena un modelo que utiliza una red neuronal para inferir recomendaciones.
+        
+        Devuelve un modelo entrenado con los datos proporcionados que se usará en el futuro para realizar 
+        recomendaciones.
+    ''' 
     def __train_with_multilayer_perceptron_classifier(self,df,layers, max_iter, block_size, seed, labelCol="label", featuresCol="features" ):
         trainer = MultilayerPerceptronClassifier(maxIter=max_iter, layers=layers, blockSize=block_size, seed=seed)
         return trainer.fit(df)
     
-    
+    '''
+        Dado un dataframe, entrena un modelo que utiliza clústering con el algoritmo KNN para inferir recomendaciones.
+        
+        Devuelve un modelo entrenado con los datos proporcionados que se usará en el futuro para realizar 
+        recomendaciones.
+    ''' 
     
     def __train_with_clustering(self,df):
         kmeans = KMeans().setK(2).setSeed(1)
         return kmeans.fit(df)
     
+    
+    '''
+        En función de los parámetros que tiene el sistema en su configuración, prepara una lista de transformadores que se utilizarán
+        en la transformación del dataframe.
+    '''
     def __prepare_dataframes_transformers(self):
         transformers_list=[]
         input_cols_va=[]
@@ -329,9 +385,20 @@ class Trained_Model:
         return transformers_list
 
 
+    '''
+        Dado un dataframe, aplica los transformadores para procesarlo y dar lugar a un df afín a los modelos que se usarán para entrenar al sistema.
+    '''
     def __prepare_df(self,df):
         return Pipeline(stages=self.__prepare_dataframes_transformers()).fit(df).transform(df)
     
+    
+    '''
+        Dado el nombre de una película, devuelve una línea con la información necesaria para el aprendizaje del sistema. Esta información
+        tendrá más o menos aspectos en función de los parámetros que aparezcan en self.parameters.
+        
+        Devuelve "" en el caso de que suceda algún error.
+        
+    '''
     def __get_film_info(self,name):
     
         info=get_movie_info(name)
