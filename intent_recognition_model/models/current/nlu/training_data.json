@@ -846,6 +846,198 @@
         "text": "I don't know what to see, tell me one please."
       },
       {
+        "intent": "ask_for_recommendation_by_genre",
+        "entities": [
+          {
+            "start": 16,
+            "end": 22,
+            "value": "action",
+            "entity": "genre"
+          }
+        ],
+        "text": "Recommend me an action film"
+      },
+      {
+        "intent": "ask_for_recommendation_by_genre",
+        "entities": [
+          {
+            "start": 15,
+            "end": 23,
+            "value": "dramatic",
+            "entity": "genre"
+          }
+        ],
+        "text": "Recommend me a dramatic film"
+      },
+      {
+        "intent": "ask_for_recommendation_by_genre",
+        "entities": [
+          {
+            "start": 25,
+            "end": 31,
+            "value": "action",
+            "entity": "genre"
+          }
+        ],
+        "text": "I would like to watch an action film"
+      },
+      {
+        "intent": "ask_for_recommendation_by_genre",
+        "entities": [
+          {
+            "start": 10,
+            "end": 18,
+            "value": "dramatic",
+            "entity": "genre"
+          }
+        ],
+        "text": "Tell me a dramatic film to watch"
+      },
+      {
+        "intent": "ask_for_recommendation_by_actor",
+        "entities": [
+          {
+            "start": 34,
+            "end": 52,
+            "value": "Leonardo Di Caprio",
+            "entity": "actor"
+          }
+        ],
+        "text": "Recommend me a film where appears Leonardo Di Caprio"
+      },
+      {
+        "intent": "ask_for_recommendation_by_actor",
+        "entities": [
+          {
+            "start": 26,
+            "end": 39,
+            "value": "John Travolta",
+            "entity": "actor"
+          }
+        ],
+        "text": "Tell me a film where acts John Travolta"
+      },
+      {
+        "intent": "ask_for_recommendation_by_actor",
+        "entities": [
+          {
+            "start": 38,
+            "end": 49,
+            "value": "Dani Rovira",
+            "entity": "actor"
+          }
+        ],
+        "text": "Tell me a film to watch where appears Dani Rovira"
+      },
+      {
+        "intent": "ask_for_recommendation_by_director",
+        "entities": [
+          {
+            "start": 38,
+            "end": 55,
+            "value": "Quentin Tarantino",
+            "entity": "director"
+          }
+        ],
+        "text": "Recommend me a film who's director is Quentin Tarantino"
+      },
+      {
+        "intent": "ask_for_recommendation_by_director",
+        "entities": [
+          {
+            "start": 15,
+            "end": 29,
+            "value": "Alfonso Quaron",
+            "entity": "director"
+          }
+        ],
+        "text": "Recommend me a Alfonso Quaron film"
+      },
+      {
+        "intent": "ask_for_recommendation_by_director",
+        "entities": [
+          {
+            "start": 10,
+            "end": 27,
+            "value": "Christopher Nolan",
+            "entity": "director"
+          }
+        ],
+        "text": "Tell me a Christopher Nolan film to watch"
+      },
+      {
+        "intent": "ask_for_recommendation_by_runtime",
+        "entities": [
+          {
+            "start": 15,
+            "end": 20,
+            "value": "short",
+            "entity": "duration"
+          }
+        ],
+        "text": "Recommend me a short duration film"
+      },
+      {
+        "intent": "ask_for_recommendation_by_runtime",
+        "entities": [
+          {
+            "start": 15,
+            "end": 20,
+            "value": "large",
+            "entity": "duration"
+          }
+        ],
+        "text": "Recommend me a large duration film"
+      },
+      {
+        "intent": "ask_for_recommendation_by_runtime",
+        "entities": [
+          {
+            "start": 10,
+            "end": 16,
+            "value": "normal",
+            "entity": "duration"
+          }
+        ],
+        "text": "Tell me a normal duration film"
+      },
+      {
+        "intent": "not_good_opinion",
+        "entities": [
+          {
+            "start": 13,
+            "end": 19,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "I don't like avatar"
+      },
+      {
+        "intent": "not_good_opinion",
+        "entities": [
+          {
+            "start": 24,
+            "end": 31,
+            "value": "Hidalgo",
+            "entity": "movie"
+          }
+        ],
+        "text": "I don't like films like Hidalgo"
+      },
+      {
+        "intent": "not_good_opinion",
+        "entities": [
+          {
+            "start": 27,
+            "end": 34,
+            "value": "hidalgo",
+            "entity": "movie"
+          }
+        ],
+        "text": "I would not see films like hidalgo"
+      },
+      {
         "intent": "not_good_opinion",
         "text": "I've seen [Gladiator] (movie) and I didn't like it."
       },
@@ -859,11 +1051,47 @@
       },
       {
         "intent": "good_opinion",
-        "text": "I've seen [Gladiator] (movie) and I loved it."
+        "entities": [
+          {
+            "start": 7,
+            "end": 14,
+            "value": "Hidalgo",
+            "entity": "movie"
+          }
+        ],
+        "text": "I love Hidalgo"
       },
       {
         "intent": "good_opinion",
-        "text": "I like [Gladiator] (movie)."
+        "entities": [
+          {
+            "start": 22,
+            "end": 29,
+            "value": "hidalgo",
+            "entity": "movie"
+          }
+        ],
+        "text": "My favourite films is hidalgo"
+      },
+      {
+        "intent": "good_opinion",
+        "entities": [
+          {
+            "start": 28,
+            "end": 45,
+            "value": "Avengers: Endgame",
+            "entity": "movie"
+          }
+        ],
+        "text": "I enjoy watching films like Avengers: Endgame"
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I've seen [Gladiator] (movie) and I loved it"
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I like [Gladiator] (movie)"
       },
       {
         "intent": "good_opinion",
@@ -877,13 +1105,49 @@
         "intent": "put_into_pending_list",
         "entities": [
           {
+            "start": 4,
+            "end": 14,
+            "value": "El padrino",
+            "entity": "movie"
+          }
+        ],
+        "text": "Add El padrino into the pending list"
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
+            "start": 7,
+            "end": 13,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Insert avatar into the pending list"
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
+            "start": 4,
+            "end": 9,
+            "value": "Oasis",
+            "entity": "movie"
+          }
+        ],
+        "text": "Put Oasis into the pending list"
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
             "start": 9,
             "end": 18,
             "value": "Gladiator",
             "entity": "movie"
           }
         ],
-        "text": "Hey, put Gladiator into the pending list."
+        "text": "Hey, put Gladiator into the pending list"
       },
       {
         "intent": "put_into_pending_list",
@@ -917,13 +1181,37 @@
         "intent": "pop_from_pending_list",
         "entities": [
           {
+            "start": 7,
+            "end": 14,
+            "value": "hidalgo",
+            "entity": "movie"
+          }
+        ],
+        "text": "Remove hidalgo from the pending list"
+      },
+      {
+        "intent": "pop_from_pending_list",
+        "entities": [
+          {
+            "start": 6,
+            "end": 12,
+            "value": "Batman",
+            "entity": "movie"
+          }
+        ],
+        "text": "Erase Batman from the pending list"
+      },
+      {
+        "intent": "pop_from_pending_list",
+        "entities": [
+          {
             "start": 4,
             "end": 13,
             "value": "gladiator",
             "entity": "movie"
           }
         ],
-        "text": "Pop gladiator from the pending list."
+        "text": "Pop gladiator from the pending list"
       },
       {
         "intent": "pop_from_pending_list",

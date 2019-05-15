@@ -98,19 +98,50 @@
     -I would like to watch a film, tell me one please.
     -I don't know what to see, tell me one please.
     
+    ## intent: ask_for_recommendation_by_genre
+    - Recommend me an [action](genre) film
+    - Recommend me a [dramatic](genre) film
+    - I would like to watch an [action](genre) film
+    - Tell me a [dramatic](genre) film to watch 
+
+    ## intent: ask_for_recommendation_by_actor
+    - Recommend me a film where appears [Leonardo Di Caprio](actor)
+    - Tell me a film where acts [John Travolta](actor)
+    - Tell me a film to watch where appears [Dani Rovira](actor)
+    
+    ## intent: ask_for_recommendation_by_director
+    - Recommend me a film who's director is [Quentin Tarantino](director)
+    - Recommend me a [Alfonso Quaron](director) film
+    - Tell me a [Christopher Nolan](director) film to watch
+    
+    ## intent: ask_for_recommendation_by_runtime
+    - Recommend me a [short](duration) duration film
+    - Recommend me a [large](duration) duration film
+    - Tell me a [normal](duration) duration film
+    
+    
     ## intent: not_good_opinion
+    - I don't like [avatar](movie)
+    - I don't like films like [Hidalgo](movie)
+    - I would not see films like [hidalgo](movie)
     - I've seen [Gladiator] (movie) and I didn't like it.
     - I don't like [Gladiator] (movie).
     - Don't recommend me films like [gladiator] (movie)
     
     ## intent: good_opinion
-    - I've seen [Gladiator] (movie) and I loved it.
-    - I like [Gladiator] (movie).
+    - I love [Hidalgo](movie)
+    - My favourite films is [hidalgo](movie)
+    - I enjoy watching films like [Avengers: Endgame](movie)
+    - I've seen [Gladiator] (movie) and I loved it
+    - I like [Gladiator] (movie)
     - Next time recommend me films like [gladiator] (movie)
     - I like films like [Gladiator] (movie)
     
     ## intent: put_into_pending_list
-    - Hey, put [Gladiator](movie) into the pending list.
+    - Add [El padrino](movie) into the pending list
+    - Insert [avatar](movie) into the pending list
+    - Put [Oasis](movie) into the pending list
+    - Hey, put [Gladiator](movie) into the pending list
     - I want you to insert [avatar](movie) into the pending list.
     
     ## intent: list_pending_list
@@ -120,7 +151,9 @@
     - Tell me what I saved to watch later.
     
     ## intent: pop_from_pending_list
-    - Pop [gladiator](movie) from the pending list.
+    - Remove [hidalgo](movie) from the pending list
+    - Erase [Batman](movie) from the pending list
+    - Pop [gladiator](movie) from the pending list
     - I've seen [Avengers: Infinity War](movie), pop it from the pending list.
     
     

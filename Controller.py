@@ -89,11 +89,26 @@ class Controller:
 
     def procesa(self,intent, entity):
         
+        
+        
         #Si el intent no tiene que ver con obtener información sobre una película.
         if(intent=="ask_for_recommendation"):
             return self.__get_recommended_film()        
         elif(intent=="list_pending_list"):
             return self.__parse_pending_list()
+    
+    
+        if(intent=="ask_for_recommendation_by_genre"):
+            return self.__get_recommended_parameter("genre",entity)
+        elif(intent=="ask_for_recommendation_by_actor"):
+            return self.__get_recommended_parameter("actor",entity)
+        elif(intent=="ask_for_recommendation_by_director"):
+            return self.__get_recommended_parameter("director",entity)
+        elif(intent=="ask_for_recommendation_by_runtime"):
+            return self.__get_recommended_parameter("runtime",entity)
+            
+
+    
     
         #Obtenemos la película a la que se refería el usuario con la entrada.
         if not entity in self.film_names.keys():
@@ -242,6 +257,29 @@ class Controller:
             
         return "" #Implica error.        
     
+    
+    def __get_recommended_parameter(self,parameter,entity):
+        
+        if parameter=='actor':
+            films=self.__get_films_by_actor(entity)
+        elif parameter=='director':
+            films=self.__get_films_by_director(entity)
+        elif parameter=='runtime':
+            films=self.__get_films_by_Runtime(entity)
+        elif parameter=='genre':
+            films=self.__get_films_by_genre(entity)
+            
+        for x in films:
+
+            title=x['Title']
+            if(self.tm.get_recommendation(title)=='YES' and (not title in self.not_to_recommend.keys()) and (not title in self.recommended_movies.keys())):
+                self.recommended_movies[title]=None
+                self.__write_on_file(self.recommended_filename,title)
+                return title
+        return "" #Implica error.
+    
+    
+    
     def __get_film_info_db_id(self,ID):
         
         myquery = { "id": ID }
@@ -293,10 +331,27 @@ class Controller:
                 myfile.write(x+'\n')
     
     def __get_info_from_db(self,name):        
-        myquery = { "Title": name }
-        mydoc = db.peliculas.find(myquery)
-        return mydoc[0]
+        return list(db.peliculas.find({ "Title": name }))[0]
         
+    def __get_films_by_genre(self,genre):
+        return list(db.peliculas.find({ "Genre": genre }))
+    
+    def __get_films_by_director(self,director):
+        return list(db.peliculas.find({ "Director": director }))
+    
+    def __get_films_by_actor(self,actor):
+        return list(db.peliculas.find({ "Actors": actor }))
+    
+    def __get_films_by_Runtime(self, runtime):
+        if runtime=="short":
+            query= { "Runtime": { '$lt': 90 } }
+        elif runtime=="medium":
+            query={ '$and': [ { "Runtime": { '$lt': 120 } }, { "Runtime": { '$gt': 90 } }  ]  } 
+        elif runtime=="large":
+            query= { "Runtime": { '$gt': 120 } }
+
+        return list(db.peliculas.find( query ))
+
 
 if __name__ == "__main__" :
 
@@ -310,6 +365,7 @@ if __name__ == "__main__" :
     
         #print(intent)
         #print(entity)
+        
         if(entity=="" and intent!="list_pending_list" and intent!="ask_for_recommendation" ):
             entity=input("Which film are you talking about?  \n")
         print('\n')
