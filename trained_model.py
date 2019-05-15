@@ -32,8 +32,13 @@ from pyspark.ml.clustering import KMeans
 from pyspark.ml.feature import VectorAssembler, StringIndexer
 from pyspark.sql.types import IntegerType
 
-from omdb_module import get_movie_info
+#from omdb_module import get_movie_info
 from pathlib import Path
+#from Controller import db
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://127.0.0.1:27017')
+db = client.recomendadorpeliculas 
 
 
 class Trained_Model:
@@ -106,6 +111,7 @@ class Trained_Model:
             self.model = self.__train_with_multilayer_perceptron_classifier(df,[len(self.parameters), 5,4, 2], self.max_iter, 128, 1234)
         elif self.model_type == "clustering":
             self.model = self.__train_with_clustering(df)
+        
     
     '''
         FUNCIONALIDADES PRINCIPALES DEL SISTEMA
@@ -150,7 +156,6 @@ class Trained_Model:
     def get_recommendation(self,film_name):    
         #Obtenemos la línea que se escribirá en el test_data
         line = self.__get_film_info(film_name)
-    
         #Si se ha encontrado la película...
         if line!="":
             df= self.__load_df(self.training_data) #Cargamos el dataframe que usamos para inferir la recomendación
@@ -227,7 +232,6 @@ class Trained_Model:
 
     def __add_training_info(self,film_name, recommend):
         line = self.__get_film_info(film_name)
-        
         #Si line=="" hubo un error.
         if line!="":
             line = line + recommend +"\n" 
@@ -401,45 +405,80 @@ class Trained_Model:
     '''
     def __get_film_info(self,name):
     
-        info=get_movie_info(name)
-        
+        #info=get_movie_info(name)
+        info=self.__get_film_info_db(name)
+        '''
         if(info['Response']=='False' or info['Rated']=='N/A'):
             return ""    
+        '''
+        
+        if(info==""):
+            return ""
         
         line = ""
+        
+        
         
         if 'title' in self.parameters:
             line= line + info['Title'] + ","
     
         if 'director' in self.parameters:
-            director=info['Director'].split(',')[0]
+            director=info['Director']
             line= line + director + ","  
             
         if 'Runtime' in self.parameters:
-            runtime=info['Runtime'].split()[0]
-            line= line + runtime + ","  
+            runtime=info['Runtime']
+            line= line + str(runtime) + ","  
         
-        genres=info['Genre'].split()
-            
+        #genres=info['Genre'].split()
+        genres=info['Genre']
+        
         if 'Genre' in self.parameters: 
-            genre=genres[0].replace(',','')
+            #genre=genres[0].replace(',','')
+            genre = genres[0]
             line= line + genre + ","      
         
         if 'Subgenre' in self.parameters:
-            subgenre= genres[1].replace(',','')
+            #subgenre= genres[1].replace(',','')
+            subgenre=genres[1]
             line= line + subgenre + ","       
         
-        for x in info['Ratings']:
-            if 'imdb' in self.parameters and x['Source']== 'Internet Movie Database':
-                imdb_ratio=x['Value'].split('/')[0]
-                line= line + imdb_ratio + ","  
-    
-            if 'metacritic' in self.parameters and x['Source']== 'Metacritic':
-                metacritic_ratio=x['Value'].split('/')[0]
-                line= line + metacritic_ratio + ","  
-    
-            if 'rotten' in self.parameters and x['Source']== 'Rotten Tomatoes':
-                rotten_ratio=x['Value'].replace('%','')
-                line= line + rotten_ratio + ","  
+        if 'imdb' in self.parameters :#and x['Source']== 'Internet Movie Database':
+            imdb_ratio=info['Internet Movie Database']
+            line= line + str(imdb_ratio) + "," 
+            
+        if 'metacritic' in self.parameters :#and x['Source']== 'Internet Movie Database':
+            metacritic_ratio=info['Metacritic']
+            line= line + str(metacritic_ratio) + ","  
+        
+        if 'rotten' in self.parameters :#and x['Source']== 'Internet Movie Database':
+            rotten_ratio=info['Rotten Tomatoes']
+            line= line + str(rotten_ratio) + ","
                 
-        return line    
+        return line  
+    
+    def __get_film_info_db(self,name):
+        
+        myquery = { "Title": name }
+        
+        mydoc = db.peliculas.find(myquery)
+        
+        mydoc=list(mydoc)
+        
+        #print(mydoc)
+        #print(mydoc[0])
+        if(len(mydoc)==0):
+            return ""
+        
+        return mydoc[0]
+    
+'''
+    EJEMPLO DE FUNCIONAMIENTO DEL MÓDULO
+'''
+if __name__ == "__main__":
+    tm=Trained_Model()
+    
+    print(tm.add_opinion('Hidalgo','YES'))
+    print(tm.add_opinion('Avatar','NO'))
+    print(tm.get_recommendation('Hidalgo'))
+
