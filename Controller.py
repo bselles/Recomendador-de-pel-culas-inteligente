@@ -44,9 +44,13 @@ class Controller:
         
         #diccionario que almacenará las potenciales recomendaciones (títulos de películas)
         self.pot_rec= self.__init_potential_recom()
-        
+
         #Modelo que se entrenará para que el sistema infiera buenas recomendaciones.
         self.tm = Trained_Model() 
+        
+        
+        self.pending_list_file= 'pldb'
+        self.pending_list=self.__init_names_dict(self.pending_list_file)
         
     
     '''
@@ -107,6 +111,8 @@ class Controller:
         #Si el intent no tiene que ver con obtener información sobre una película.
         if(intent=="ask_for_recommendation"):
             return self.__get_recommended_film()        
+        elif(intent=="list_pending_list"):
+            return self.__parse_pending_list()
         
         #Obtenemos la película a la que se refería el usuario con la entrada.
         title=search_for_movie(entity)
@@ -115,14 +121,47 @@ class Controller:
             #No se ha encontrado ningún resultado para esa película.
             return "Sorry, I don't know which film you're talking about."
         
+        if(intent=="put_into_pending_list"):
+            if title in self.pending_list:
+                return title +  ' is already in your pending list'
+            
+            self.pending_list[title]=None
+            self.__change_list_pending_file()
+
+            return title+ " it's now in your pending list"
+            
+        elif(intent=="pop_from_pending_list"):
+            if not title in self.pending_list:
+                return title+ 'is not in your pending list'
+            del self.pending_list[title]
+            self.__change_list_pending_file()
+
+            return title + ' popped from the pending list'
+
+            
+        
         if(intent=="not_good_opinion"):
             #Almacenamos que esa película no le gusta para no recomendarsela en un futuro.
             self.not_to_recommend[title]=None
             self.__write_on_file(self.not_to_rec_filename,title)
             self.tm.add_opinion(entity,'NO')
+            
+            #Si está dentro de la pending list, la quitamos.
+            if title in self.pending_list:
+                del self.pending_list[title]
+            self.__change_list_pending_file()
+
+            
             return "It seems you don't like "+ title+".I'll remember it"
         elif(intent=="good_opinion"):
             self.tm.add_opinion(entity,'YES')
+            
+            #Si está dentro de la pending list, la quitamos.
+            if title in self.pending_list:
+                del self.pending_list[title]
+                
+            self.__change_list_pending_file()
+            
             return "Did you like it? Perfect. I'll remember it :)"
 
         
@@ -178,6 +217,16 @@ class Controller:
         else:
             return "They don't seem to like it a lot. It has a "+ str(score) 
     
+    '''
+        Devuelve una cadena de caracteres que incluirá todas las películas que contiene la lista de pendientes.
+    
+    '''
+    def __parse_pending_list(self):
+        result=""
+        for x, y in self.pending_list.items():
+            result= result+ x + '\n'
+            
+        return result
     
     '''
         En función de los gustos del usuario inferidos por el sistema, el sistema realiza una recomendación. La recomendación consistirá en 
@@ -195,7 +244,6 @@ class Controller:
         while True:
                 #Generamos un número aleatorio.
                 index=random.randint(0,self.pr_size-1)
-                
                 #Obtenemos la película asociada a esa posición aleatoria.
                 film=self.pot_rec[index]
                 
@@ -203,9 +251,8 @@ class Controller:
                 try:
                     #Buscamos el título que tiene asociado en IMDB
                     title=search_for_movie(film)
-                    
                     if (title == ""):
-                        self.pot_rec[index]=self.__get_first_and_delete()                  
+                        self.pot_rec[index]=self.__get_first_and_delete() 
                     if ('YES'== self.tm.get_recommendation(title)):
                         self.pot_rec[index]=self.__get_first_and_delete()                  
                         if not(title in self.not_to_recommend.keys()) and not (title in self.recommended_movies.keys()):
@@ -257,6 +304,13 @@ class Controller:
          with open(filename, "a") as myfile:
                 myfile.write(film+'\n')
             
+    '''
+        En función del contenido de la lista de películas pendientes, modifica el contenido del fichero que almacena las listas pendientes. 
+    '''
+    def __change_list_pending_file(self):
+        with open(self.pending_list_file, "a") as myfile:
+            for x, y in self.pending_list.items():
+                myfile.write(x+'\n')
     
     '''
         Elimina la primera línea de un fichero. 
@@ -282,15 +336,15 @@ if __name__ == "__main__" :
     
     
     while True:
-        example= input('Insert here: \n')
+        example= input('What can I do for you? \n')
     
         intent, entity= recognize_intent(example)
     
-        print(intent)
-        print(entity)
-        if(entity=="" and intent!="ask_for_recommendation"):
+        #print(intent)
+        #print(entity)
+        if(entity=="" and intent!="list_pending_list" and intent!="ask_for_recommendation" ):
             entity=input("Which film are you talking about?  \n")
-        
+        print('\n')
         print(c.procesa(intent, entity))
     
 

@@ -1,0 +1,945 @@
+{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 27,
+            "end": 33,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What can you tell me about avatar"
+      },
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 19,
+            "end": 25,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me info about Avatar"
+      },
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 36,
+            "end": 42,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which information do you have about avatar"
+      },
+      {
+        "intent": "ask_for_general_info",
+        "entities": [
+          {
+            "start": 27,
+            "end": 33,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Do you know anything about Avatar"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 21,
+            "end": 34,
+            "value": "Black Panther",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the plot of Black Panther"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 27,
+            "end": 36,
+            "value": "Gladiator",
+            "entity": "movie"
+          }
+        ],
+        "text": "And what about the plot of Gladiator"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 36,
+            "end": 39,
+            "value": "her",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me something about the plot of her"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 23,
+            "end": 35,
+            "value": "12 angry man",
+            "entity": "movie"
+          }
+        ],
+        "text": "Is it good the plot of 12 angry man. What about it"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 36,
+            "end": 42,
+            "value": "batman",
+            "entity": "movie"
+          }
+        ],
+        "text": "Could you sum to me what happens in batman"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 16,
+            "end": 22,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What happens in Avatar"
+      },
+      {
+        "intent": "ask_for_plot",
+        "entities": [
+          {
+            "start": 39,
+            "end": 45,
+            "value": "batman",
+            "entity": "movie"
+          }
+        ],
+        "text": "What can you tell me about the plot of batman"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 15,
+            "end": 28,
+            "value": "The Godfather",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who appears in The Godfather"
+      },
+      {
+        "intent": "ask_for_actors",
+        "text": "Tell me who appears in [Drake]](movie)"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 15,
+            "end": 20,
+            "value": "drake",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who appears in drake"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 41,
+            "end": 51,
+            "value": "casablanca",
+            "entity": "movie"
+          }
+        ],
+        "text": "And what about the actors who appears in casablanca"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 21,
+            "end": 31,
+            "value": "Casablanca",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who are the stars in Casablanca"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who are the actors of Avatar"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 23,
+            "end": 31,
+            "value": "Die Hard",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me who appears in Die Hard"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 26,
+            "end": 38,
+            "value": "Harry Potter",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who's part of the cast of Harry Potter"
+      },
+      {
+        "intent": "ask_for_actors",
+        "entities": [
+          {
+            "start": 20,
+            "end": 28,
+            "value": "kingsman",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the cast of kingsman"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 17,
+            "end": 27,
+            "value": "el padrino",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who has directed el padrino"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Who's the director of avatar"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "And what about the director of Avatar"
+      },
+      {
+        "intent": "ask_for_director",
+        "entities": [
+          {
+            "start": 30,
+            "end": 36,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me who's the director of Avatar"
+      },
+      {
+        "intent": "ask_for_awards",
+        "entities": [
+          {
+            "start": 5,
+            "end": 15,
+            "value": "El Padrino",
+            "entity": "movie"
+          }
+        ],
+        "text": "Does El Padrino have any awards"
+      },
+      {
+        "intent": "ask_for_awards",
+        "entities": [
+          {
+            "start": 9,
+            "end": 15,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What did Avatar won"
+      },
+      {
+        "intent": "ask_for_awards",
+        "entities": [
+          {
+            "start": 9,
+            "end": 15,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What has Avatar won"
+      },
+      {
+        "intent": "ask_for_awards",
+        "entities": [
+          {
+            "start": 5,
+            "end": 11,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Does Avatar has some trophies"
+      },
+      {
+        "intent": "ask_for_awards",
+        "entities": [
+          {
+            "start": 13,
+            "end": 19,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me what Avatar have won"
+      },
+      {
+        "intent": "ask_for_awards",
+        "entities": [
+          {
+            "start": 4,
+            "end": 10,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Did Avatar earn any trophy"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 32,
+            "end": 38,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do metacritic thinks about Avatar"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the score of Avatar in metacritic"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 28,
+            "end": 34,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the punctuation of Avatar in metacritic"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 18,
+            "end": 24,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score Avatar has in metacritic"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score that reaches Avatar in metacritic"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 23,
+            "end": 29,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which punctuation does Avatar have in metacritic"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 36,
+            "end": 42,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "How do metacritic users think about Avatar"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 42,
+            "end": 48,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me what metacritic users think about Avatar"
+      },
+      {
+        "intent": "ask_for_metacritic_score",
+        "entities": [
+          {
+            "start": 39,
+            "end": 42,
+            "value": "Joy",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do they think in metacritic about Joy"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 37,
+            "end": 43,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do rotten tomatoes thinks about Avatar"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the score of Avatar in rotten tomatoes"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 18,
+            "end": 24,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score Avatar has in rotten tomatoes"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 28,
+            "end": 34,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the punctuation of Avatar in rotten"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score that reaches Avatar in rotten tomatoes"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 23,
+            "end": 29,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which punctuation does Avatar have in rotten tomatoes"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 41,
+            "end": 47,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "How do rotten tomatoes users think about Avatar"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 47,
+            "end": 53,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me what rotten tomatoes users think about Avatar"
+      },
+      {
+        "intent": "ask_for_rotten_score",
+        "entities": [
+          {
+            "start": 44,
+            "end": 47,
+            "value": "Joy",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do they think in rotten tomatoes about Joy"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 26,
+            "end": 32,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do imdb thinks about Avatar"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the score of Avatar in imdb"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 18,
+            "end": 24,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score Avatar has in imdb"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 28,
+            "end": 34,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the punctuation of Avatar in imdb"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score that reaches Avatar in imdb"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 23,
+            "end": 29,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which punctuation does avatar have in imdb"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 30,
+            "end": 36,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "How do imdb users think about avatar"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 37,
+            "end": 43,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me what  imdb users think about avatar"
+      },
+      {
+        "intent": "ask_for_imdb_score",
+        "entities": [
+          {
+            "start": 33,
+            "end": 36,
+            "value": "joy",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do they think in imdb about joy"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 24,
+            "end": 30,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do you think about Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the score of Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 21,
+            "end": 27,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score of Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the score that reaches Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 23,
+            "end": 29,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which punctuation does Avatar have"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 28,
+            "end": 34,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Which is the punctuation of Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 25,
+            "end": 31,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "How do users think about Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 31,
+            "end": 37,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me what users think about Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 27,
+            "end": 33,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Tell me the punctuation of Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 24,
+            "end": 30,
+            "value": "Avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "How would you punctuate Avatar"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 25,
+            "end": 28,
+            "value": "joy",
+            "entity": "movie"
+          }
+        ],
+        "text": "What do they think about joy"
+      },
+      {
+        "intent": "ask_for_score",
+        "entities": [
+          {
+            "start": 18,
+            "end": 24,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "Can you punctuate avatar"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "Hey, which film could I watch?"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "Tell me a film to watch"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "Tell me a film to see"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "I don't know what to see"
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "I would like to watch a film, tell me one please."
+      },
+      {
+        "intent": "ask_for_recommendation",
+        "text": "I don't know what to see, tell me one please."
+      },
+      {
+        "intent": "not_good_opinion",
+        "text": "I've seen [Gladiator] (movie) and I didn't like it."
+      },
+      {
+        "intent": "not_good_opinion",
+        "text": "I don't like [Gladiator] (movie)."
+      },
+      {
+        "intent": "not_good_opinion",
+        "text": "Don't recommend me films like [gladiator] (movie)"
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I've seen [Gladiator] (movie) and I loved it."
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I like [Gladiator] (movie)."
+      },
+      {
+        "intent": "good_opinion",
+        "text": "Next time recommend me films like [gladiator] (movie)"
+      },
+      {
+        "intent": "good_opinion",
+        "text": "I like films like [Gladiator] (movie)"
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
+            "start": 9,
+            "end": 18,
+            "value": "Gladiator",
+            "entity": "movie"
+          }
+        ],
+        "text": "Hey, put Gladiator into the pending list."
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
+            "start": 21,
+            "end": 27,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "I want you to insert avatar into the pending list."
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "Which movies do I have into the pending list?"
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "List me the pending list."
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "What films did I save into the pending list?"
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "Tell me what I saved to watch later."
+      },
+      {
+        "intent": "pop_from_pending_list",
+        "entities": [
+          {
+            "start": 4,
+            "end": 13,
+            "value": "gladiator",
+            "entity": "movie"
+          }
+        ],
+        "text": "Pop gladiator from the pending list."
+      },
+      {
+        "intent": "pop_from_pending_list",
+        "entities": [
+          {
+            "start": 10,
+            "end": 32,
+            "value": "Avengers: Infinity War",
+            "entity": "movie"
+          }
+        ],
+        "text": "I've seen Avengers: Infinity War, pop it from the pending list."
+      }
+    ],
+    "regex_features": [],
+    "lookup_tables": [],
+    "entity_synonyms": []
+  }
+}

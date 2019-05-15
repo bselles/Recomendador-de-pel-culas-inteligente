@@ -872,6 +872,70 @@
       {
         "intent": "good_opinion",
         "text": "I like films like [Gladiator] (movie)"
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
+            "start": 9,
+            "end": 18,
+            "value": "Gladiator",
+            "entity": "movie"
+          }
+        ],
+        "text": "Hey, put Gladiator into the pending list."
+      },
+      {
+        "intent": "put_into_pending_list",
+        "entities": [
+          {
+            "start": 21,
+            "end": 27,
+            "value": "avatar",
+            "entity": "movie"
+          }
+        ],
+        "text": "I want you to insert avatar into the pending list."
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "Which movies do I have into the pending list?"
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "List me the pending list."
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "What films did I save into the pending list?"
+      },
+      {
+        "intent": "list_pending_list",
+        "text": "Tell me what I saved to watch later."
+      },
+      {
+        "intent": "pop_from_pending_list",
+        "entities": [
+          {
+            "start": 4,
+            "end": 13,
+            "value": "gladiator",
+            "entity": "movie"
+          }
+        ],
+        "text": "Pop gladiator from the pending list."
+      },
+      {
+        "intent": "pop_from_pending_list",
+        "entities": [
+          {
+            "start": 10,
+            "end": 32,
+            "value": "Avengers: Infinity War",
+            "entity": "movie"
+          }
+        ],
+        "text": "I've seen Avengers: Infinity War, pop it from the pending list."
       }
     ],
     "regex_features": [],
