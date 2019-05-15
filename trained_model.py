@@ -32,9 +32,7 @@ from pyspark.ml.clustering import KMeans
 from pyspark.ml.feature import VectorAssembler, StringIndexer
 from pyspark.sql.types import IntegerType
 
-#from omdb_module import get_movie_info
 from pathlib import Path
-#from Controller import db
 from pymongo import MongoClient
 
 client = MongoClient('mongodb://127.0.0.1:27017')
@@ -407,17 +405,11 @@ class Trained_Model:
     
         #info=get_movie_info(name)
         info=self.__get_film_info_db(name)
-        '''
-        if(info['Response']=='False' or info['Rated']=='N/A'):
-            return ""    
-        '''
         
         if(info==""):
             return ""
         
         line = ""
-        
-        
         
         if 'title' in self.parameters:
             line= line + info['Title'] + ","
@@ -430,28 +422,25 @@ class Trained_Model:
             runtime=info['Runtime']
             line= line + str(runtime) + ","  
         
-        #genres=info['Genre'].split()
         genres=info['Genre']
         
         if 'Genre' in self.parameters: 
-            #genre=genres[0].replace(',','')
             genre = genres[0]
             line= line + genre + ","      
         
         if 'Subgenre' in self.parameters:
-            #subgenre= genres[1].replace(',','')
             subgenre=genres[1]
             line= line + subgenre + ","       
         
-        if 'imdb' in self.parameters :#and x['Source']== 'Internet Movie Database':
+        if 'imdb' in self.parameters :
             imdb_ratio=info['Internet Movie Database']
             line= line + str(imdb_ratio) + "," 
             
-        if 'metacritic' in self.parameters :#and x['Source']== 'Internet Movie Database':
+        if 'metacritic' in self.parameters :
             metacritic_ratio=info['Metacritic']
             line= line + str(metacritic_ratio) + ","  
         
-        if 'rotten' in self.parameters :#and x['Source']== 'Internet Movie Database':
+        if 'rotten' in self.parameters :
             rotten_ratio=info['Rotten Tomatoes']
             line= line + str(rotten_ratio) + ","
                 
@@ -461,12 +450,8 @@ class Trained_Model:
         
         myquery = { "Title": name }
         
-        mydoc = db.peliculas.find(myquery)
+        mydoc = list(db.peliculas.find(myquery))
         
-        mydoc=list(mydoc)
-        
-        #print(mydoc)
-        #print(mydoc[0])
         if(len(mydoc)==0):
             return ""
         

@@ -6,8 +6,6 @@
 
 #Imports necesarios para el funcionamiento del sistema
 from intent_recognition import recognize_intent
-#from omdb_module import get_movie_info , search_for_movie ,get_rottentomatoes_score
-#from omdb_module import search_for_movie
 from trained_model import Trained_Model
 from pathlib import Path
 import random
@@ -47,12 +45,6 @@ class Controller:
         
         #potential recomendations size. Numero de películas que aspirarán a ser recomendadas en cada selección aleatoria. El parámetro es configurable.
         self.pr_size=468
-        
-        #fichero que almacena las posibles peliculas a recomendar.
-        #self.pr_filename='prfn'
-        
-        #diccionario que almacenará las potenciales recomendaciones (títulos de películas)
-        #self.pot_rec= self.__init_potential_recom()
 
         #Modelo que se entrenará para que el sistema infiera buenas recomendaciones.
         self.tm = Trained_Model() 
@@ -63,32 +55,6 @@ class Controller:
         
         self.film_names_file= 'films_names'
         self.film_names=self.__init_names_dict(self.film_names_file)
-        
-        
-    
-    '''
-        Carga self.pr_size títulos de películas en self.pot_rec. Estas serán las que se utilizarán para recomendar al usuario.    
-    '''
-    '''
-    def __init_potential_recom(self):
-        
-        result={}
-        
-        #Leemos todas las películas.
-        with open(self.pr_filename, "r") as f:
-            lines = f.readlines()
-                
-        #Insertamos las pr_size primeras películas en el diccionario.
-        for x in range(self.pr_size):
-            result[x]=lines[x].strip('\n')
-        
-        #Eliminamos las películas del fichero. Para ello, escribimos las siguientes (obviando las self.pr_size primeras)        
-        with open(self.pr_filename, "w") as f:
-            for x in range(self.pr_size-1,len(lines)):
-                f.write(lines[x])
-
-        return result
-    '''
     
     '''
         Dado el nombre de un fichero que contiene nombres de películas, devuelve un diccionario cuyas claves serán esos nombres y su valor será NULL.
@@ -130,17 +96,9 @@ class Controller:
             return self.__parse_pending_list()
     
         #Obtenemos la película a la que se refería el usuario con la entrada.
-        
-        '''
-            CAMBIAR ESTO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        '''
-        #title=search_for_movie(entity)
-        
-        #if title == "":
         if not entity in self.film_names.keys():
             #No se ha encontrado ningún resultado para esa película.
             return "Sorry, I don't know which film you're talking about."
-        
         
         title=entity
         
@@ -155,7 +113,7 @@ class Controller:
             
         elif(intent=="pop_from_pending_list"):
             if not title in self.pending_list:
-                return title+ 'is not in your pending list'
+                return title+ ' is not in your pending list'
             del self.pending_list[title]
             self.__change_list_pending_file()
 
@@ -173,7 +131,6 @@ class Controller:
             if title in self.pending_list:
                 del self.pending_list[title]
             self.__change_list_pending_file()
-
             
             return "It seems you don't like "+ title+".I'll remember it"
         elif(intent=="good_opinion"):
@@ -189,10 +146,7 @@ class Controller:
 
         
         #Si el intent tiene que ver con obtener información sobre una película.
-        #Obtenemos la información de la película introducida por el usuario.
-        
-        #info=get_movie_info(title)
-        
+        #Obtenemos la información de la película introducida por el usuario.       
         info=self.__get_info_from_db(title)
         
         
@@ -211,26 +165,18 @@ class Controller:
             return self.__parse_score_info(score,'Metacritic')
             
         elif(intent=="ask_for_imdb_score"):
-            #score=float(info['imdbRating'])
             score=float(info['Internet Movie Database'])
             return self.__parse_score_info(score,'IMDB')
             
         elif(intent=="ask_for_rotten_score"):            
-            
-            #score=float( get_rottentomatoes_score(info))
             score=float(info['Rotten Tomatoes'])
             return self.__parse_score_info(score/10,'rotten tomatoes')
             
         elif(intent=="ask_for_score"):
             result= "Well, I don't know what people think about this film but I can tell you which scores do this movie have in different sites.\n"
-            
-            #result= result+ "Rottentomatoes score: " + get_rottentomatoes_score(info) + "\n"
             result= result+ "Rottentomatoes score: " + str(info['Rotten Tomatoes']/10) + "\n"
             result= result+ "IMDB score: " + str(info['Internet Movie Database']) + "\n"
             result= result+ "Metacritic score: " + str(info['Metacritic']/10) + "\n"
-
-        
-        
             return result
         else:
             return "I don't understand what you're asking for. Can you repeat it in a different way?"
@@ -253,7 +199,7 @@ class Controller:
     
     '''
     def __parse_pending_list(self):
-        result=""
+        result="This is your pending list: \n"
         for x, y in self.pending_list.items():
             result= result+ x + '\n'
             
@@ -276,28 +222,13 @@ class Controller:
                 #Generamos un número aleatorio.
                 index=random.randint(1,self.pr_size)
                 #Obtenemos la película asociada a esa posición aleatoria.
-                #film=self.pot_rec[index]
                 film=self.__get_film_info_db_id(index)
                 if film!="":
                     #Nos aseguramos de que la película sea válida.
                     try:
                         #Buscamos el título que tiene asociado en IMDB
-                        #title=search_for_movie(film['Title'])
                         title=film['Title']
-                        '''
-                        if (title == ""):
-                            self.pot_rec[index]=self.__get_first_and_delete() 
-                            if ('YES'== self.tm.get_recommendation(title)):
-                                self.pot_rec[index]=self.__get_first_and_delete()                  
-                                if not(title in self.not_to_recommend.keys()) and not (title in self.recommended_movies.keys()):
-                                    #Añadimos la película como recomendada en el diccionario.
-                                    self.recommended_movies[title]=None
-                                    #Añadimos la película como recomendada en el fichero.
-                                    self.__write_on_file(self.recommended_filename,title)
-        
-                                    return title
-                         ''' 
-                         
+
                         if(title!="" and self.tm.get_recommendation(title)=='YES'):
                              if(not title in self.not_to_recommend.keys() and not(title in self.recommended_movies.keys())):
                                 #Añadimos la película como recomendada en el diccionario.
@@ -305,27 +236,17 @@ class Controller:
                                 #Añadimos la película como recomendada en el fichero.
                                 self.__write_on_file(self.recommended_filename,title)
                                 return title
-                         
-                    except Exception as e:
+                    except :
                         print('')
-                        #print(index)
-                        #Si hubo algún problema, sustituimos la película actual por una nueva.
-                        #self.pot_rec[index]=self.__get_first_and_delete()                  
-                        #print(e)
-                        #print('Error con la película '+ str(film))
+
             
         return "" #Implica error.        
     
     def __get_film_info_db_id(self,ID):
         
         myquery = { "id": ID }
+        mydoc = list(db.peliculas.find(myquery))
         
-        mydoc = db.peliculas.find(myquery)
-        
-        mydoc=list(mydoc)
-        
-        #print(mydoc)
-        #print(mydoc[0])
         if(len(mydoc)==0):
             return ""
         
@@ -347,13 +268,10 @@ class Controller:
         result=result+ self.__parse_score_info(float(info['Internet Movie Database']),'IMDB')+ '\n'
         
         result=result+"Rotten Tomatoes score:" +'\n'
-        #result=result+ self.__parse_score_info(float( get_rottentomatoes_score(info)),'Rotten tomatoes')+ '\n'
         result=result+ self.__parse_score_info(float(info['Rotten Tomatoes']/10),'Rotten tomatoes')+ '\n'
 
         result=result+"Metacritic score:" +'\n'
-        #result=result+ self.__parse_score_info(float( info['Metascore']),'Metacritic')+ '\n'
         result=result+ self.__parse_score_info(float( info['Metacritic']/10),'Metacritic')+ '\n'
-
        
         return result
 
@@ -373,22 +291,6 @@ class Controller:
         with open(self.pending_list_file, "w") as myfile:
             for x, y in self.pending_list.items():
                 myfile.write(x+'\n')
-    
-    '''
-        Elimina la primera línea de un fichero. 
-    '''
-    def __get_first_and_delete(self):
-        with open(self.pr_filename, "r") as f:
-            lines = f.readlines() 
-                
-        result=lines[0].strip('\n')
-        
-        with open(self.pr_filename, "w") as f:
-            count = range(1,len(lines))
-            for i in  count:
-                f.write(lines[i])
-                
-        return result
     
     def __get_info_from_db(self,name):        
         myquery = { "Title": name }

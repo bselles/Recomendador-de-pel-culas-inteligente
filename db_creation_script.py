@@ -24,7 +24,6 @@ client = MongoClient('mongodb://127.0.0.1:27017')
 db = client.recomendadorpeliculas
 
 
-
 result=[]
 
 with open(films_names, 'w+') as fw:
