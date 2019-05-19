@@ -87,7 +87,7 @@ class Controller:
         para responder a la solicitud del usuario.
     '''
 
-    def procesa(self,intent, entity):
+    def procesa(self, intent, entity):
         
         
         
@@ -148,6 +148,7 @@ class Controller:
             self.__change_list_pending_file()
             
             return "It seems you don't like "+ title+".I'll remember it"
+        
         elif(intent=="good_opinion"):
             self.tm.add_opinion(entity,'YES')
             
@@ -167,14 +168,19 @@ class Controller:
         
         if(intent=="ask_for_general_info"):
             return self.__parse_general_info(info)
+        
         elif(intent=="ask_for_plot"):
             return 'Here you go a summary of the plot of '+ title +':\n'+ info['Plot']
+        
         elif(intent=="ask_for_actors"):
             return 'The main stars that appear in ' +  title + ' are '+ ', '.join(info['Actors'])
+        
         elif(intent=="ask_for_director"):
             return 'The director of '+ title + ' is '+ info['Director']
+        
         elif(intent=="ask_for_awards"):
             return 'These are the awards that '+ title +' won:\n' + str(info['Awards'])
+        
         elif(intent=="ask_for_metacritic_score"):            
             score=float(info['Metacritic'])/10
             return self.__parse_score_info(score,'Metacritic')
