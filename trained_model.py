@@ -35,6 +35,9 @@ from pyspark.sql.types import IntegerType
 from pathlib import Path
 from pymongo import MongoClient
 
+import systemconfiguration
+#from sysconfig.py import model_type, parameters, numeric_columns, string_columns
+
 client = MongoClient('mongodb://127.0.0.1:27017')
 db = client.recomendadorpeliculas 
 
@@ -60,17 +63,14 @@ class Trained_Model:
         En función del orden en el que se ubiquen en la lista, aparecerán escritos en la cabecera de los ficheros de una forma u otra.
         '''
         
-        self.parameters=['director','Runtime','Genre','Subgenre','imdb','rotten','metacritic']   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.        
-        
-        self.numeric_columns=['Runtime','imdb','rotten','metacritic']         #Parámetros numericos que se van a utilizar.
-        self.string_columns=['director','Genre','Subgenre','recommend']       #Parámetros no numericos (cadenas de caracteres) que se van a utilizar en el entrenamiento del modelo.
-        
-        self.incomplete_sign='NULL'         #Símbolo que identifica las posiciones del datafraque no tienen ningún valor. 
-        
-        self.label_column="label"           #Nombre de la columna del dataframe asociada a la etiqueta (label)
-        self.result_column="prediction"     #Nombre de la columna del dataframe asociada a la predicción realizada por el sistema.
-        self.features_column="features"     #Nombre de la columna que almacenará el vector de características que utilizará el sistema para su aprendizaje.
-        
+        self.parameters=systemconfiguration.parameters   #Nombre de las columnas (en orden) del fichero de entrenamiento/test que se van a utilizar en la tarea.        
+        self.numeric_columns=systemconfiguration.numeric_columns        #Parámetros numericos que se van a utilizar.
+        self.string_columns = systemconfiguration.string_columns      #Parámetros no numericos (cadenas de caracteres) que se van a utilizar en el entrenamiento del modelo.
+        self.incomplete_sign=systemconfiguration.incomplete_sign         #Símbolo que identifica las posiciones del datafraque no tienen ningún valor. 
+        self.label_column=systemconfiguration.label_column           #Nombre de la columna del dataframe asociada a la etiqueta (label)
+        self.result_column=systemconfiguration.result_column     #Nombre de la columna del dataframe asociada a la predicción realizada por el sistema.
+        self.features_column=systemconfiguration.features_column     #Nombre de la columna que almacenará el vector de características que utilizará el sistema para su aprendizaje.
+       
         #En función del valor de este campo, utilizará una técnica u otra para entrenar el sistema.
         
         '''
@@ -81,8 +81,7 @@ class Trained_Model:
                 4.Regresion logística: logistic_regression
         '''
         
-        self.model_type="clustering"
-        
+        self.model_type=systemconfiguration.model_type        
        
         #Nombre del fichero dónde de almacenarán los ejemplos de entrenamiento.
         self.training_data= "file.train"                                       
