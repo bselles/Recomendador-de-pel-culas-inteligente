@@ -20,7 +20,7 @@
         3-Aprendizaje mediante regresión logística.
         4-Aprendizaje mediante el uso de una red neuronal.
         
-    Para seleccionar un tipo de aprendizaje u otro, se debe indicar el tipo deseado en el parámetro (atributo de la clase) "model_type".
+    Para seleccionar un tipo de aprendizaje u otro, se debe indicar el tipo deseado en el parámetro "model_type" del fichero systemconfiguration.py.
     
 '''
 
@@ -36,7 +36,6 @@ from pathlib import Path
 from pymongo import MongoClient
 
 import systemconfiguration
-#from sysconfig.py import model_type, parameters, numeric_columns, string_columns
 
 client = MongoClient('mongodb://127.0.0.1:27017')
 db = client.recomendadorpeliculas 
@@ -56,7 +55,6 @@ class Trained_Model:
         #Asociados al entrenamiento del modelo mediante SparkML.
         
         #Parámetros que se utilizarán para el entrenamiento.
-        
         '''
         Deben seguir el siguiente orden (aparezcan o no):
         title, director,Runtime, Genre,Subgenre, imdb,rotten,metacritic.

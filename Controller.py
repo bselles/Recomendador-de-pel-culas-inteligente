@@ -49,10 +49,11 @@ class Controller:
         #Modelo que se entrenará para que el sistema infiera buenas recomendaciones.
         self.tm = Trained_Model() 
         
-        
+        #Diccionario que almacena la lista de pendientes.
         self.pending_list_file= 'pldb'
         self.pending_list=self.__init_names_dict(self.pending_list_file)
         
+        #Diccionario que almacena los nombres de las películas que maneja el sistema.
         self.film_names_file= 'films_names'
         self.film_names=self.__init_names_dict(self.film_names_file)
     
@@ -89,8 +90,6 @@ class Controller:
 
     def procesa(self, intent, entity):
         
-        
-        
         #Si el intent no tiene que ver con obtener información sobre una película.
         if(intent=="ask_for_recommendation"):
             return self.__get_recommended_film()        
@@ -107,9 +106,6 @@ class Controller:
         elif(intent=="ask_for_recommendation_by_runtime"):
             return self.__get_recommended_parameter("runtime",entity)
             
-
-    
-    
         #Obtenemos la película a la que se refería el usuario con la entrada.
         if not entity in self.film_names.keys():
             #No se ha encontrado ningún resultado para esa película.
@@ -263,7 +259,12 @@ class Controller:
             
         return "" #Implica error.        
     
-    
+    '''
+        Devuelve un listado de películas en las que se cumple que el valor del parámetro "parameter" es entity.
+        
+        Es decir, si parameter es "actor", devuelve películas en las que aparezca ese actor o si parameter es "genre" devuelve
+        películas de ese género.
+    '''
     def __get_recommended_parameter(self,parameter,entity):
         
         if parameter=='actor':
@@ -285,7 +286,9 @@ class Controller:
         return "" #Implica error.
     
     
-    
+    '''
+        Dado el id de una película, la busca en la BD Mongo y devuelve la información asociada.
+    '''
     def __get_film_info_db_id(self,ID):
         
         myquery = { "id": ID }
@@ -368,10 +371,7 @@ if __name__ == "__main__" :
         example= input('What can I do for you? \n')
     
         intent, entity= recognize_intent(example)
-    
-        #print(intent)
-        #print(entity)
-        
+
         if(entity=="" and intent!="list_pending_list" and intent!="ask_for_recommendation" ):
             entity=input("Which film are you talking about?  \n")
         print('\n')

@@ -13,8 +13,6 @@ films_names="./datasets/films_names"
 #Imports correspondientes
 from omdb_module import search_for_movie, get_movie_info
 from pymongo import MongoClient
-#import json
-
 
 '''
     SCRIPT PARA OBTENER LA INFORMACIÓN DE LAS PELÍCULAS DEL DATASET E INTRODUCIRLO EN LA BASE DE DATOS.

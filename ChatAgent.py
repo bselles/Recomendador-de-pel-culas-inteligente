@@ -16,7 +16,7 @@ class ChatAgent(Agent):
         self.entity = None
         self.askForEntity = {}
         self.noEntityQueries = {}
-        self.askForQuery =  "What can I help you with?\n"
+        self.askForQuery =  "What can I help you with?\n\n"
         self.nothingRecognized = "Sorry I didn't understand what you mean\n" 
         
         self.askForEntity["ask_for_recommendation_by_genre"] = "Sorry what genre were you asking about?\n"
@@ -46,10 +46,10 @@ class ChatAgent(Agent):
         
     
     def step(self):
-        #print("ChatAgent step")
         if self.model.pendingAnswer :
             # Hay una respuesta que devolver al usuario
-            print(self.model.answer)    
+            print(' ')
+            print('-- ',self.model.answer)
             self.model.pendingAnswer = False
             return 
             
@@ -75,9 +75,7 @@ class ChatAgent(Agent):
             self.entity = input(self.askForEntity[self.intent])
             # Ahora sí tenemos una query completa
             self.passQuery()
-            
-        #self.userQuery = None
-        
+                    
     def passQuery(self):
         self.model.entity = self.entity
         self.model.intent = self.intent
