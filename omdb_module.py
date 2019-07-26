@@ -13,7 +13,7 @@
 '''
 
 omdb_endpoint='http://www.omdbapi.com/?apikey='
-omdb_apikey='220fa854'
+omdb_apikey=''
 
 
 
